@@ -1,0 +1,1914 @@
+{
+  "categories": [
+    {
+      "id": "budget-friendly",
+      "slug": "budget-friendly",
+      "name": "Budget Friendly",
+      "image": "/hero1.png",
+      "description": "Festive looks at a gentler price — made for everyday celebrations.",
+      "sortOrder": 1,
+      "isActive": true,
+      "filter": "budgetFriendly"
+    },
+    {
+      "id": "aari-work-pavada-set",
+      "slug": "aari-work-pavada-set",
+      "name": "Aari Work Pavada Set",
+      "image": "/aariwork.jpg",
+      "description": "Hand-embellished aari pavada sets with intricate craft.",
+      "sortOrder": 2,
+      "isActive": true,
+      "filter": null
+    },
+    {
+      "id": "aari-work-frocks",
+      "slug": "aari-work-frocks",
+      "name": "Aari Work Frocks",
+      "image": "/pattugown.webp",
+      "description": "Aari-work frocks with fine detailing for little occasions.",
+      "sortOrder": 3,
+      "isActive": true,
+      "filter": null
+    },
+    {
+      "id": "aari-work-coat-set",
+      "slug": "aari-work-coat-set",
+      "name": "Aari Work Coat Set",
+      "image": "/green_pattu.png",
+      "description": "Layered aari coat sets for festive dressing.",
+      "sortOrder": 4,
+      "isActive": true,
+      "filter": null
+    },
+    {
+      "id": "ethnic-silk-frocks",
+      "slug": "ethnic-silk-frocks",
+      "name": "Ethnic Silk Frocks",
+      "image": "/frocks_new.webp",
+      "description": "Soft silk frocks with a festive ethnic touch.",
+      "sortOrder": 5,
+      "isActive": true,
+      "filter": null
+    },
+    {
+      "id": "kota-collection",
+      "slug": "kota-collection",
+      "name": "Kota Collection",
+      "image": "/halfsaree.webp",
+      "description": "Light kota weaves — airy, elegant, and photo-ready.",
+      "sortOrder": 6,
+      "isActive": true,
+      "filter": null
+    },
+    {
+      "id": "paithani-collection",
+      "slug": "paithani-collection",
+      "name": "Paithani Collection",
+      "image": "/pattu.png",
+      "description": "Rich paithani-inspired silks for weddings and poojas.",
+      "sortOrder": 7,
+      "isActive": true,
+      "filter": null
+    },
+    {
+      "id": "kalyani-cotton-frocks",
+      "slug": "kalyani-cotton-frocks",
+      "name": "Kalyani Cotton Frocks",
+      "image": "/frocks.webp",
+      "description": "Breathable Kalyani cotton frocks for everyday tradition.",
+      "sortOrder": 8,
+      "isActive": true,
+      "filter": null
+    },
+    {
+      "id": "pattu-pavada-sets",
+      "slug": "pattu-pavada-sets",
+      "name": "Pattu Pavada Sets",
+      "image": "/pattupavvadi.jpg",
+      "description": "Classic silk pavada sets for festivals and family celebrations.",
+      "sortOrder": 9,
+      "isActive": true,
+      "filter": null
+    },
+    {
+      "id": "crop-top-and-skirt-set",
+      "slug": "crop-top-and-skirt-set",
+      "name": "Crop Top and Skirt Set",
+      "image": "/topandskit.jpg",
+      "description": "Comfortable ethnic separates for easy festive dressing.",
+      "sortOrder": 10,
+      "isActive": true,
+      "filter": null
+    },
+    {
+      "id": "ready-to-dispatch",
+      "slug": "ready-to-dispatch",
+      "name": "Ready to Dispatch",
+      "image": "/hero.png",
+      "description": "In-stock favourites that can ship without the wait.",
+      "sortOrder": 11,
+      "isActive": true,
+      "filter": "readyToDispatch"
+    },
+    {
+      "id": "best-sellers",
+      "slug": "best-sellers",
+      "name": "Best Sellers",
+      "image": "/sunset.png",
+      "description": "Our most-loved outfits — the ones families come back for.",
+      "sortOrder": 12,
+      "isActive": true,
+      "filter": "bestseller"
+    }
+  ],
+  "products": [
+    {
+      "id": "bp-001",
+      "slug": "rose-kanjeevaram-pattu-pavadai",
+      "name": "Rose Kanjeevaram Pattu Pavadai",
+      "categoryId": "pattu-pavada-sets",
+      "description": "A soft rose Kanjeevaram pavadai with delicate border work — made for festivals and first blessings.",
+      "fabric": "Semi Kanjeevaram silk",
+      "care": [
+        "Dry clean recommended.",
+        "Store folded with tissue."
+      ],
+      "images": [
+        "/pattu.png",
+        "/pattupavvadi.jpg",
+        "/hero1.png"
+      ],
+      "colorGalleries": [
+        {
+          "color": "Rose",
+          "images": [
+            "/pattu.png",
+            "/pattupavvadi.jpg"
+          ]
+        },
+        {
+          "color": "Gold",
+          "images": [
+            "/hero1.png"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "bp-001-ROS-1Y",
+          "sku": "bp-001-ROS-1Y",
+          "size": "1Y",
+          "color": "Rose",
+          "price": {
+            "selling": 2499,
+            "original": 2999,
+            "currency": "INR"
+          },
+          "stock": 4,
+          "isActive": true
+        },
+        {
+          "id": "bp-001-ROS-2Y",
+          "sku": "bp-001-ROS-2Y",
+          "size": "2Y",
+          "color": "Rose",
+          "price": {
+            "selling": 2699,
+            "original": 3199,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-001-ROS-3Y",
+          "sku": "bp-001-ROS-3Y",
+          "size": "3Y",
+          "color": "Rose",
+          "price": {
+            "selling": 2899,
+            "original": 3399,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-001-ROS-4Y",
+          "sku": "bp-001-ROS-4Y",
+          "size": "4Y",
+          "color": "Rose",
+          "price": {
+            "selling": 3099,
+            "original": 3599,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-001-GOL-2Y",
+          "sku": "bp-001-GOL-2Y",
+          "size": "2Y",
+          "color": "Gold",
+          "price": {
+            "selling": 2999,
+            "original": 3499,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-001-GOL-3Y",
+          "sku": "bp-001-GOL-3Y",
+          "size": "3Y",
+          "color": "Gold",
+          "price": {
+            "selling": 3199,
+            "original": 3699,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-001-GOL-4Y",
+          "sku": "bp-001-GOL-4Y",
+          "size": "4Y",
+          "color": "Gold",
+          "price": {
+            "selling": 3399,
+            "original": 3899,
+            "currency": "INR"
+          },
+          "stock": 0,
+          "isActive": true
+        }
+      ],
+      "isNew": false,
+      "featured": true,
+      "isActive": true,
+      "tags": [
+        "ready-to-dispatch",
+        "bestseller"
+      ],
+      "createdAt": "2026-08-01T00:00:00.000Z",
+      "updatedAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "bp-002",
+      "slug": "ivory-gold-aari-gown",
+      "name": "Ivory & Gold Aari Gown",
+      "categoryId": "aari-work-frocks",
+      "description": "An ivory silk gown with gold aari motifs — graceful for birthdays and poojas.",
+      "fabric": "Tissue silk with aari work",
+      "care": [
+        "Dry clean only.",
+        "Avoid direct sunlight when storing."
+      ],
+      "images": [
+        "/green_pattu.png",
+        "/brown_pattu.png",
+        "/hero.png"
+      ],
+      "colorGalleries": [
+        {
+          "color": "Ivory",
+          "images": [
+            "/green_pattu.png",
+            "/brown_pattu.png"
+          ]
+        },
+        {
+          "color": "Gold",
+          "images": [
+            "/hero.png"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "bp-002-IVO-2Y",
+          "sku": "bp-002-IVO-2Y",
+          "size": "2Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 2899,
+            "original": 3399,
+            "currency": "INR"
+          },
+          "stock": 4,
+          "isActive": true
+        },
+        {
+          "id": "bp-002-IVO-3Y",
+          "sku": "bp-002-IVO-3Y",
+          "size": "3Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 3099,
+            "original": 3599,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-002-IVO-4Y",
+          "sku": "bp-002-IVO-4Y",
+          "size": "4Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 3299,
+            "original": 3799,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-002-IVO-5Y",
+          "sku": "bp-002-IVO-5Y",
+          "size": "5Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 3499,
+            "original": 3999,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-002-GOL-2Y",
+          "sku": "bp-002-GOL-2Y",
+          "size": "2Y",
+          "color": "Gold",
+          "price": {
+            "selling": 3149,
+            "original": 3649,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-002-GOL-3Y",
+          "sku": "bp-002-GOL-3Y",
+          "size": "3Y",
+          "color": "Gold",
+          "price": {
+            "selling": 3349,
+            "original": 3849,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-002-GOL-4Y",
+          "sku": "bp-002-GOL-4Y",
+          "size": "4Y",
+          "color": "Gold",
+          "price": {
+            "selling": 3549,
+            "original": 4049,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-002-GOL-5Y",
+          "sku": "bp-002-GOL-5Y",
+          "size": "5Y",
+          "color": "Gold",
+          "price": {
+            "selling": 3749,
+            "original": 4249,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        }
+      ],
+      "isNew": true,
+      "featured": true,
+      "isActive": true,
+      "tags": [
+        "ready-to-dispatch",
+        "bestseller"
+      ],
+      "createdAt": "2026-08-01T00:00:00.000Z",
+      "updatedAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "bp-003",
+      "slug": "magenta-classic-pavadai",
+      "name": "Magenta Classic Pattu Pavadai",
+      "categoryId": "pattu-pavada-sets",
+      "description": "Rich magenta silk with a clean traditional cut — a Baby Pleats favourite.",
+      "fabric": "Soft silk blend",
+      "care": [
+        "Dry clean recommended."
+      ],
+      "images": [
+        "/pattupavvadi.jpg",
+        "/hero.png",
+        "/hero1.png"
+      ],
+      "colorGalleries": [
+        {
+          "color": "Magenta",
+          "images": [
+            "/pattupavvadi.jpg",
+            "/hero.png"
+          ]
+        },
+        {
+          "color": "Pink",
+          "images": [
+            "/hero1.png"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "bp-003-MAG-1Y",
+          "sku": "bp-003-MAG-1Y",
+          "size": "1Y",
+          "color": "Magenta",
+          "price": {
+            "selling": 1999,
+            "original": 2499,
+            "currency": "INR"
+          },
+          "stock": 4,
+          "isActive": true
+        },
+        {
+          "id": "bp-003-MAG-2Y",
+          "sku": "bp-003-MAG-2Y",
+          "size": "2Y",
+          "color": "Magenta",
+          "price": {
+            "selling": 2199,
+            "original": 2699,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-003-MAG-3Y",
+          "sku": "bp-003-MAG-3Y",
+          "size": "3Y",
+          "color": "Magenta",
+          "price": {
+            "selling": 2399,
+            "original": 2899,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-003-MAG-4Y",
+          "sku": "bp-003-MAG-4Y",
+          "size": "4Y",
+          "color": "Magenta",
+          "price": {
+            "selling": 2599,
+            "original": 3099,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-003-PIN-1Y",
+          "sku": "bp-003-PIN-1Y",
+          "size": "1Y",
+          "color": "Pink",
+          "price": {
+            "selling": 2149,
+            "original": 2649,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-003-PIN-2Y",
+          "sku": "bp-003-PIN-2Y",
+          "size": "2Y",
+          "color": "Pink",
+          "price": {
+            "selling": 2349,
+            "original": 2849,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-003-PIN-3Y",
+          "sku": "bp-003-PIN-3Y",
+          "size": "3Y",
+          "color": "Pink",
+          "price": {
+            "selling": 2549,
+            "original": 3049,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-003-PIN-4Y",
+          "sku": "bp-003-PIN-4Y",
+          "size": "4Y",
+          "color": "Pink",
+          "price": {
+            "selling": 2749,
+            "original": 3249,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        }
+      ],
+      "isNew": false,
+      "featured": true,
+      "isActive": true,
+      "tags": [
+        "ready-to-dispatch",
+        "bestseller"
+      ],
+      "createdAt": "2026-08-01T00:00:00.000Z",
+      "updatedAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "bp-004",
+      "slug": "pastel-half-saree-set",
+      "name": "Pastel Half Saree Set",
+      "categoryId": "kota-collection",
+      "description": "A pastel half saree with blouse and dupatta — light, festive, and photo-ready.",
+      "fabric": "Tissue silk",
+      "care": [
+        "Dry clean only."
+      ],
+      "images": [
+        "/halfsaree.webp",
+        "/hero1.png",
+        "/frocks.webp"
+      ],
+      "colorGalleries": [
+        {
+          "color": "Pastel Pink",
+          "images": [
+            "/halfsaree.webp",
+            "/hero1.png"
+          ]
+        },
+        {
+          "color": "Mint",
+          "images": [
+            "/frocks.webp"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "bp-004-PAS-8Y",
+          "sku": "bp-004-PAS-8Y",
+          "size": "8Y",
+          "color": "Pastel Pink",
+          "price": {
+            "selling": 2699,
+            "original": 3199,
+            "currency": "INR"
+          },
+          "stock": 4,
+          "isActive": true
+        },
+        {
+          "id": "bp-004-PAS-10Y",
+          "sku": "bp-004-PAS-10Y",
+          "size": "10Y",
+          "color": "Pastel Pink",
+          "price": {
+            "selling": 2899,
+            "original": 3399,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-004-PAS-12Y",
+          "sku": "bp-004-PAS-12Y",
+          "size": "12Y",
+          "color": "Pastel Pink",
+          "price": {
+            "selling": 3099,
+            "original": 3599,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-004-MIN-8Y",
+          "sku": "bp-004-MIN-8Y",
+          "size": "8Y",
+          "color": "Mint",
+          "price": {
+            "selling": 2899,
+            "original": 3399,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-004-MIN-10Y",
+          "sku": "bp-004-MIN-10Y",
+          "size": "10Y",
+          "color": "Mint",
+          "price": {
+            "selling": 3099,
+            "original": 3599,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-004-MIN-12Y",
+          "sku": "bp-004-MIN-12Y",
+          "size": "12Y",
+          "color": "Mint",
+          "price": {
+            "selling": 3299,
+            "original": 3799,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        }
+      ],
+      "isNew": true,
+      "featured": true,
+      "isActive": true,
+      "tags": [
+        "bestseller"
+      ],
+      "createdAt": "2026-08-01T00:00:00.000Z",
+      "updatedAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "bp-005",
+      "slug": "emerald-aari-top-skirt",
+      "name": "Emerald Aari Top & Skirt",
+      "categoryId": "crop-top-and-skirt-set",
+      "description": "Emerald top and skirt with subtle aari work — easy to wear, lovely to gift.",
+      "fabric": "Soft silk with aari",
+      "care": [
+        "Dry clean recommended."
+      ],
+      "images": [
+        "/topandskit.jpg",
+        "/aariwork.jpg",
+        "/hero.png"
+      ],
+      "colorGalleries": [
+        {
+          "color": "Emerald",
+          "images": [
+            "/topandskit.jpg",
+            "/aariwork.jpg"
+          ]
+        },
+        {
+          "color": "Peacock",
+          "images": [
+            "/hero.png"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "bp-005-EME-2Y",
+          "sku": "bp-005-EME-2Y",
+          "size": "2Y",
+          "color": "Emerald",
+          "price": {
+            "selling": 2199,
+            "original": 2699,
+            "currency": "INR"
+          },
+          "stock": 4,
+          "isActive": true
+        },
+        {
+          "id": "bp-005-EME-3Y",
+          "sku": "bp-005-EME-3Y",
+          "size": "3Y",
+          "color": "Emerald",
+          "price": {
+            "selling": 2399,
+            "original": 2899,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-005-EME-4Y",
+          "sku": "bp-005-EME-4Y",
+          "size": "4Y",
+          "color": "Emerald",
+          "price": {
+            "selling": 2599,
+            "original": 3099,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-005-EME-5Y",
+          "sku": "bp-005-EME-5Y",
+          "size": "5Y",
+          "color": "Emerald",
+          "price": {
+            "selling": 2799,
+            "original": 3299,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-005-PEA-2Y",
+          "sku": "bp-005-PEA-2Y",
+          "size": "2Y",
+          "color": "Peacock",
+          "price": {
+            "selling": 2399,
+            "original": 2899,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-005-PEA-3Y",
+          "sku": "bp-005-PEA-3Y",
+          "size": "3Y",
+          "color": "Peacock",
+          "price": {
+            "selling": 2599,
+            "original": 3099,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-005-PEA-4Y",
+          "sku": "bp-005-PEA-4Y",
+          "size": "4Y",
+          "color": "Peacock",
+          "price": {
+            "selling": 2799,
+            "original": 3299,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-005-PEA-5Y",
+          "sku": "bp-005-PEA-5Y",
+          "size": "5Y",
+          "color": "Peacock",
+          "price": {
+            "selling": 2999,
+            "original": 3499,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        }
+      ],
+      "isNew": false,
+      "featured": true,
+      "isActive": true,
+      "tags": [
+        "ready-to-dispatch",
+        "bestseller"
+      ],
+      "createdAt": "2026-08-01T00:00:00.000Z",
+      "updatedAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "bp-006",
+      "slug": "peach-blossom-frock",
+      "name": "Peach Blossom Frock",
+      "categoryId": "ethnic-silk-frocks",
+      "description": "A peach frock with gentle ethnic accents — comfort for play and celebration.",
+      "fabric": "Cotton silk blend",
+      "care": [
+        "Gentle hand wash or dry clean."
+      ],
+      "images": [
+        "/frocks_new.webp",
+        "/hero1.png",
+        "/hero.png"
+      ],
+      "colorGalleries": [
+        {
+          "color": "Peach",
+          "images": [
+            "/frocks_new.webp",
+            "/hero1.png"
+          ]
+        },
+        {
+          "color": "Ivory",
+          "images": [
+            "/hero.png"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "bp-006-PEA-1Y",
+          "sku": "bp-006-PEA-1Y",
+          "size": "1Y",
+          "color": "Peach",
+          "price": {
+            "selling": 1499,
+            "original": 1999,
+            "currency": "INR"
+          },
+          "stock": 4,
+          "isActive": true
+        },
+        {
+          "id": "bp-006-PEA-2Y",
+          "sku": "bp-006-PEA-2Y",
+          "size": "2Y",
+          "color": "Peach",
+          "price": {
+            "selling": 1699,
+            "original": 2199,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-006-PEA-3Y",
+          "sku": "bp-006-PEA-3Y",
+          "size": "3Y",
+          "color": "Peach",
+          "price": {
+            "selling": 1899,
+            "original": 2399,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-006-PEA-4Y",
+          "sku": "bp-006-PEA-4Y",
+          "size": "4Y",
+          "color": "Peach",
+          "price": {
+            "selling": 2099,
+            "original": 2599,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-006-IVO-1Y",
+          "sku": "bp-006-IVO-1Y",
+          "size": "1Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 1599,
+            "original": 2099,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-006-IVO-2Y",
+          "sku": "bp-006-IVO-2Y",
+          "size": "2Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 1799,
+            "original": 2299,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-006-IVO-3Y",
+          "sku": "bp-006-IVO-3Y",
+          "size": "3Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 1999,
+            "original": 2499,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-006-IVO-4Y",
+          "sku": "bp-006-IVO-4Y",
+          "size": "4Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 2199,
+            "original": 2699,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        }
+      ],
+      "isNew": true,
+      "featured": true,
+      "isActive": true,
+      "tags": [
+        "budget-friendly",
+        "bestseller"
+      ],
+      "createdAt": "2026-08-01T00:00:00.000Z",
+      "updatedAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "bp-007",
+      "slug": "royal-blue-pattu-gown",
+      "name": "Royal Blue Pattu Gown",
+      "categoryId": "ethnic-silk-frocks",
+      "description": "Deep blue silk gown with gold touches — statement wear for little princesses.",
+      "fabric": "Semi silk",
+      "care": [
+        "Dry clean only."
+      ],
+      "images": [
+        "/pattugown.webp",
+        "/hero.png",
+        "/hero1.png"
+      ],
+      "colorGalleries": [
+        {
+          "color": "Royal Blue",
+          "images": [
+            "/pattugown.webp",
+            "/hero.png"
+          ]
+        },
+        {
+          "color": "Navy",
+          "images": [
+            "/hero1.png"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "bp-007-ROY-3Y",
+          "sku": "bp-007-ROY-3Y",
+          "size": "3Y",
+          "color": "Royal Blue",
+          "price": {
+            "selling": 2599,
+            "original": 3099,
+            "currency": "INR"
+          },
+          "stock": 4,
+          "isActive": true
+        },
+        {
+          "id": "bp-007-ROY-4Y",
+          "sku": "bp-007-ROY-4Y",
+          "size": "4Y",
+          "color": "Royal Blue",
+          "price": {
+            "selling": 2799,
+            "original": 3299,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-007-ROY-5Y",
+          "sku": "bp-007-ROY-5Y",
+          "size": "5Y",
+          "color": "Royal Blue",
+          "price": {
+            "selling": 2999,
+            "original": 3499,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-007-ROY-6Y",
+          "sku": "bp-007-ROY-6Y",
+          "size": "6Y",
+          "color": "Royal Blue",
+          "price": {
+            "selling": 3199,
+            "original": 3699,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-007-NAV-3Y",
+          "sku": "bp-007-NAV-3Y",
+          "size": "3Y",
+          "color": "Navy",
+          "price": {
+            "selling": 2749,
+            "original": 3249,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-007-NAV-4Y",
+          "sku": "bp-007-NAV-4Y",
+          "size": "4Y",
+          "color": "Navy",
+          "price": {
+            "selling": 2949,
+            "original": 3449,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-007-NAV-5Y",
+          "sku": "bp-007-NAV-5Y",
+          "size": "5Y",
+          "color": "Navy",
+          "price": {
+            "selling": 3149,
+            "original": 3649,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-007-NAV-6Y",
+          "sku": "bp-007-NAV-6Y",
+          "size": "6Y",
+          "color": "Navy",
+          "price": {
+            "selling": 3349,
+            "original": 3849,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        }
+      ],
+      "isNew": false,
+      "featured": true,
+      "isActive": true,
+      "tags": [
+        "bestseller"
+      ],
+      "createdAt": "2026-08-01T00:00:00.000Z",
+      "updatedAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "bp-008",
+      "slug": "sunset-orange-pavadai",
+      "name": "Sunset Orange Pattu Pavadai",
+      "categoryId": "pattu-pavada-sets",
+      "description": "Warm sunset orange pavadai with contrast border — bright and joyful.",
+      "fabric": "Soft Kanjeevaram blend",
+      "care": [
+        "Dry clean recommended."
+      ],
+      "images": [
+        "/sunset.png",
+        "/hero1.png",
+        "/hero.png"
+      ],
+      "colorGalleries": [
+        {
+          "color": "Sunset Orange",
+          "images": [
+            "/sunset.png"
+          ]
+        },
+        {
+          "color": "Mustard",
+          "images": [
+            "/hero1.png",
+            "/hero.png"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "bp-008-SUN-1Y",
+          "sku": "bp-008-SUN-1Y",
+          "size": "1Y",
+          "color": "Sunset Orange",
+          "price": {
+            "selling": 2299,
+            "original": 2799,
+            "currency": "INR"
+          },
+          "stock": 4,
+          "isActive": true
+        },
+        {
+          "id": "bp-008-SUN-2Y",
+          "sku": "bp-008-SUN-2Y",
+          "size": "2Y",
+          "color": "Sunset Orange",
+          "price": {
+            "selling": 2499,
+            "original": 2999,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-008-SUN-3Y",
+          "sku": "bp-008-SUN-3Y",
+          "size": "3Y",
+          "color": "Sunset Orange",
+          "price": {
+            "selling": 2699,
+            "original": 3199,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-008-SUN-4Y",
+          "sku": "bp-008-SUN-4Y",
+          "size": "4Y",
+          "color": "Sunset Orange",
+          "price": {
+            "selling": 2899,
+            "original": 3399,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-008-MUS-1Y",
+          "sku": "bp-008-MUS-1Y",
+          "size": "1Y",
+          "color": "Mustard",
+          "price": {
+            "selling": 2499,
+            "original": 2999,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-008-MUS-2Y",
+          "sku": "bp-008-MUS-2Y",
+          "size": "2Y",
+          "color": "Mustard",
+          "price": {
+            "selling": 2699,
+            "original": 3199,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-008-MUS-3Y",
+          "sku": "bp-008-MUS-3Y",
+          "size": "3Y",
+          "color": "Mustard",
+          "price": {
+            "selling": 2899,
+            "original": 3399,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-008-MUS-4Y",
+          "sku": "bp-008-MUS-4Y",
+          "size": "4Y",
+          "color": "Mustard",
+          "price": {
+            "selling": 3099,
+            "original": 3599,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        }
+      ],
+      "isNew": true,
+      "featured": true,
+      "isActive": true,
+      "tags": [
+        "bestseller"
+      ],
+      "createdAt": "2026-08-01T00:00:00.000Z",
+      "updatedAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "bp-009",
+      "slug": "lavender-aari-set",
+      "name": "Lavender Aari Work Set",
+      "categoryId": "aari-work-pavada-set",
+      "description": "Lavender aari set with fine hand detailing — crafted for memorable occasions.",
+      "fabric": "Tissue silk with aari",
+      "care": [
+        "Dry clean only."
+      ],
+      "images": [
+        "/aariwork.jpg",
+        "/hero.png",
+        "/hero1.png"
+      ],
+      "colorGalleries": [
+        {
+          "color": "Lavender",
+          "images": [
+            "/aariwork.jpg",
+            "/hero.png"
+          ]
+        },
+        {
+          "color": "Ivory",
+          "images": [
+            "/hero1.png"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "bp-009-LAV-2Y",
+          "sku": "bp-009-LAV-2Y",
+          "size": "2Y",
+          "color": "Lavender",
+          "price": {
+            "selling": 2399,
+            "original": 2899,
+            "currency": "INR"
+          },
+          "stock": 4,
+          "isActive": true
+        },
+        {
+          "id": "bp-009-LAV-3Y",
+          "sku": "bp-009-LAV-3Y",
+          "size": "3Y",
+          "color": "Lavender",
+          "price": {
+            "selling": 2599,
+            "original": 3099,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-009-LAV-4Y",
+          "sku": "bp-009-LAV-4Y",
+          "size": "4Y",
+          "color": "Lavender",
+          "price": {
+            "selling": 2799,
+            "original": 3299,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-009-LAV-5Y",
+          "sku": "bp-009-LAV-5Y",
+          "size": "5Y",
+          "color": "Lavender",
+          "price": {
+            "selling": 2999,
+            "original": 3499,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-009-IVO-2Y",
+          "sku": "bp-009-IVO-2Y",
+          "size": "2Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 2549,
+            "original": 3049,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-009-IVO-3Y",
+          "sku": "bp-009-IVO-3Y",
+          "size": "3Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 2749,
+            "original": 3249,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-009-IVO-4Y",
+          "sku": "bp-009-IVO-4Y",
+          "size": "4Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 2949,
+            "original": 3449,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-009-IVO-5Y",
+          "sku": "bp-009-IVO-5Y",
+          "size": "5Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 3149,
+            "original": 3649,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        }
+      ],
+      "isNew": true,
+      "featured": false,
+      "isActive": true,
+      "tags": [
+        "ready-to-dispatch"
+      ],
+      "createdAt": "2026-08-01T00:00:00.000Z",
+      "updatedAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "bp-010",
+      "slug": "mint-cotton-tradition-frock",
+      "name": "Mint Cotton Tradition Frock",
+      "categoryId": "kalyani-cotton-frocks",
+      "description": "Breathable mint frock with a traditional touch — everyday ethnic ease.",
+      "fabric": "Soft cotton",
+      "care": [
+        "Gentle wash.",
+        "Iron on low heat."
+      ],
+      "images": [
+        "/frocks.webp",
+        "/hero1.png",
+        "/hero.png"
+      ],
+      "colorGalleries": [
+        {
+          "color": "Mint",
+          "images": [
+            "/frocks.webp"
+          ]
+        },
+        {
+          "color": "White",
+          "images": [
+            "/hero1.png",
+            "/hero.png"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "bp-010-MIN-1Y",
+          "sku": "bp-010-MIN-1Y",
+          "size": "1Y",
+          "color": "Mint",
+          "price": {
+            "selling": 999,
+            "original": 1499,
+            "currency": "INR"
+          },
+          "stock": 4,
+          "isActive": true
+        },
+        {
+          "id": "bp-010-MIN-2Y",
+          "sku": "bp-010-MIN-2Y",
+          "size": "2Y",
+          "color": "Mint",
+          "price": {
+            "selling": 1199,
+            "original": 1699,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-010-MIN-3Y",
+          "sku": "bp-010-MIN-3Y",
+          "size": "3Y",
+          "color": "Mint",
+          "price": {
+            "selling": 1399,
+            "original": 1899,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-010-WHI-1Y",
+          "sku": "bp-010-WHI-1Y",
+          "size": "1Y",
+          "color": "White",
+          "price": {
+            "selling": 1099,
+            "original": 1599,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-010-WHI-2Y",
+          "sku": "bp-010-WHI-2Y",
+          "size": "2Y",
+          "color": "White",
+          "price": {
+            "selling": 1299,
+            "original": 1799,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-010-WHI-3Y",
+          "sku": "bp-010-WHI-3Y",
+          "size": "3Y",
+          "color": "White",
+          "price": {
+            "selling": 1499,
+            "original": 1999,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        }
+      ],
+      "isNew": true,
+      "featured": false,
+      "isActive": true,
+      "tags": [
+        "budget-friendly",
+        "ready-to-dispatch"
+      ],
+      "createdAt": "2026-08-01T00:00:00.000Z",
+      "updatedAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "bp-011",
+      "slug": "gold-border-half-saree",
+      "name": "Gold Border Half Saree",
+      "categoryId": "paithani-collection",
+      "description": "Classic half saree with a rich gold border for temple festivals and weddings.",
+      "fabric": "Semi Kanjeevaram",
+      "care": [
+        "Dry clean only."
+      ],
+      "images": [
+        "/halfsaree.webp",
+        "/hero.png",
+        "/hero1.png"
+      ],
+      "colorGalleries": [
+        {
+          "color": "Maroon",
+          "images": [
+            "/halfsaree.webp",
+            "/hero.png"
+          ]
+        },
+        {
+          "color": "Gold",
+          "images": [
+            "/hero1.png"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "bp-011-MAR-8Y",
+          "sku": "bp-011-MAR-8Y",
+          "size": "8Y",
+          "color": "Maroon",
+          "price": {
+            "selling": 2799,
+            "original": 3299,
+            "currency": "INR"
+          },
+          "stock": 4,
+          "isActive": true
+        },
+        {
+          "id": "bp-011-MAR-10Y",
+          "sku": "bp-011-MAR-10Y",
+          "size": "10Y",
+          "color": "Maroon",
+          "price": {
+            "selling": 2999,
+            "original": 3499,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-011-MAR-12Y",
+          "sku": "bp-011-MAR-12Y",
+          "size": "12Y",
+          "color": "Maroon",
+          "price": {
+            "selling": 3199,
+            "original": 3699,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-011-GOL-10Y",
+          "sku": "bp-011-GOL-10Y",
+          "size": "10Y",
+          "color": "Gold",
+          "price": {
+            "selling": 3299,
+            "original": 3799,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-011-GOL-12Y",
+          "sku": "bp-011-GOL-12Y",
+          "size": "12Y",
+          "color": "Gold",
+          "price": {
+            "selling": 3499,
+            "original": 3999,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        }
+      ],
+      "isNew": false,
+      "featured": false,
+      "isActive": true,
+      "tags": [],
+      "createdAt": "2026-08-01T00:00:00.000Z",
+      "updatedAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "bp-012",
+      "slug": "coral-top-skirt",
+      "name": "Coral Top & Skirt",
+      "categoryId": "crop-top-and-skirt-set",
+      "description": "Coral separates that mix comfort with festive colour — easy dressing, beautiful photos.",
+      "fabric": "Soft silk blend",
+      "care": [
+        "Dry clean recommended."
+      ],
+      "images": [
+        "/topandskit.jpg",
+        "/frocks.webp",
+        "/hero1.png"
+      ],
+      "colorGalleries": [
+        {
+          "color": "Coral",
+          "images": [
+            "/topandskit.jpg"
+          ]
+        },
+        {
+          "color": "Peach",
+          "images": [
+            "/frocks.webp",
+            "/hero1.png"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "bp-012-COR-2Y",
+          "sku": "bp-012-COR-2Y",
+          "size": "2Y",
+          "color": "Coral",
+          "price": {
+            "selling": 1799,
+            "original": 2299,
+            "currency": "INR"
+          },
+          "stock": 4,
+          "isActive": true
+        },
+        {
+          "id": "bp-012-COR-3Y",
+          "sku": "bp-012-COR-3Y",
+          "size": "3Y",
+          "color": "Coral",
+          "price": {
+            "selling": 1999,
+            "original": 2499,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-012-COR-4Y",
+          "sku": "bp-012-COR-4Y",
+          "size": "4Y",
+          "color": "Coral",
+          "price": {
+            "selling": 2199,
+            "original": 2699,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-012-COR-5Y",
+          "sku": "bp-012-COR-5Y",
+          "size": "5Y",
+          "color": "Coral",
+          "price": {
+            "selling": 2399,
+            "original": 2899,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-012-PEA-2Y",
+          "sku": "bp-012-PEA-2Y",
+          "size": "2Y",
+          "color": "Peach",
+          "price": {
+            "selling": 1899,
+            "original": 2399,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-012-PEA-3Y",
+          "sku": "bp-012-PEA-3Y",
+          "size": "3Y",
+          "color": "Peach",
+          "price": {
+            "selling": 2099,
+            "original": 2599,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-012-PEA-4Y",
+          "sku": "bp-012-PEA-4Y",
+          "size": "4Y",
+          "color": "Peach",
+          "price": {
+            "selling": 2299,
+            "original": 2799,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-012-PEA-5Y",
+          "sku": "bp-012-PEA-5Y",
+          "size": "5Y",
+          "color": "Peach",
+          "price": {
+            "selling": 2499,
+            "original": 2999,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        }
+      ],
+      "isNew": false,
+      "featured": false,
+      "isActive": true,
+      "tags": [
+        "budget-friendly"
+      ],
+      "createdAt": "2026-08-01T00:00:00.000Z",
+      "updatedAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "bp-013",
+      "slug": "ivory-aari-coat-set",
+      "name": "Ivory Aari Coat Set",
+      "categoryId": "aari-work-coat-set",
+      "description": "An ivory coat set with delicate aari embroidery — festive layering made easy.",
+      "fabric": "Tissue silk with aari work",
+      "care": [
+        "Dry clean only."
+      ],
+      "images": [
+        "/green_pattu.png",
+        "/hero.png",
+        "/brown_pattu.png"
+      ],
+      "colorGalleries": [
+        {
+          "color": "Ivory",
+          "images": [
+            "/green_pattu.png",
+            "/hero.png"
+          ]
+        },
+        {
+          "color": "Gold",
+          "images": [
+            "/brown_pattu.png"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "id": "bp-013-IVO-2Y",
+          "sku": "bp-013-IVO-2Y",
+          "size": "2Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 2599,
+            "original": 3099,
+            "currency": "INR"
+          },
+          "stock": 4,
+          "isActive": true
+        },
+        {
+          "id": "bp-013-IVO-3Y",
+          "sku": "bp-013-IVO-3Y",
+          "size": "3Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 2799,
+            "original": 3299,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-013-IVO-4Y",
+          "sku": "bp-013-IVO-4Y",
+          "size": "4Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 2999,
+            "original": 3499,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-013-IVO-5Y",
+          "sku": "bp-013-IVO-5Y",
+          "size": "5Y",
+          "color": "Ivory",
+          "price": {
+            "selling": 3199,
+            "original": 3699,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-013-GOL-2Y",
+          "sku": "bp-013-GOL-2Y",
+          "size": "2Y",
+          "color": "Gold",
+          "price": {
+            "selling": 2799,
+            "original": 3299,
+            "currency": "INR"
+          },
+          "stock": 3,
+          "isActive": true
+        },
+        {
+          "id": "bp-013-GOL-3Y",
+          "sku": "bp-013-GOL-3Y",
+          "size": "3Y",
+          "color": "Gold",
+          "price": {
+            "selling": 2999,
+            "original": 3499,
+            "currency": "INR"
+          },
+          "stock": 2,
+          "isActive": true
+        },
+        {
+          "id": "bp-013-GOL-4Y",
+          "sku": "bp-013-GOL-4Y",
+          "size": "4Y",
+          "color": "Gold",
+          "price": {
+            "selling": 3199,
+            "original": 3699,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        },
+        {
+          "id": "bp-013-GOL-5Y",
+          "sku": "bp-013-GOL-5Y",
+          "size": "5Y",
+          "color": "Gold",
+          "price": {
+            "selling": 3399,
+            "original": 3899,
+            "currency": "INR"
+          },
+          "stock": 1,
+          "isActive": true
+        }
+      ],
+      "isNew": true,
+      "featured": false,
+      "isActive": true,
+      "tags": [
+        "ready-to-dispatch"
+      ],
+      "createdAt": "2026-08-01T00:00:00.000Z",
+      "updatedAt": "2026-08-01T00:00:00.000Z"
+    }
+  ]
+}
