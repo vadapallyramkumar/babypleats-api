@@ -41,6 +41,26 @@ function parseJson<T>(raw: string, fallback: T): T {
   }
 }
 
+export function serializeVariants(variants: ApiVariant[]) {
+  return JSON.stringify(variants);
+}
+
+export function serializeCare(care: string[]) {
+  return JSON.stringify(care);
+}
+
+export function serializeImages(images: string[]) {
+  return JSON.stringify(images);
+}
+
+export function serializeGalleries(g: ColorGallery[]) {
+  return JSON.stringify(g);
+}
+
+export function serializeTags(tags: string[]) {
+  return JSON.stringify(tags);
+}
+
 export function mapCategory(c: {
   id: string;
   slug: string;
@@ -63,12 +83,16 @@ export function mapCategory(c: {
   };
 }
 
-export function mapProduct(row: ProductRow) {
+export function mapProduct(row: ProductRow, includeInactiveVariants = false) {
   const allVariants = parseJson<ApiVariant[]>(row.variants, []);
-  const variants = allVariants.filter((v) => v.isActive);
+  const variants = includeInactiveVariants
+    ? allVariants
+    : allVariants.filter((v) => v.isActive);
 
-  let min = variants[0];
-  for (const v of variants) {
+  const active = variants.filter((v) => v.isActive);
+  const priceSource = active.length ? active : variants;
+  let min = priceSource[0];
+  for (const v of priceSource) {
     if (v.price.selling < (min?.price.selling ?? Infinity)) min = v;
   }
 
@@ -80,9 +104,9 @@ export function mapProduct(row: ProductRow) {
       }
     : { selling: 0, currency: "INR" as const };
 
-  const sizes = [...new Set(variants.map((v) => v.size))];
-  const colors = [...new Set(variants.map((v) => v.color))];
-  const stock = variants.reduce((sum, v) => sum + v.stock, 0);
+  const sizes = [...new Set(active.map((v) => v.size))];
+  const colors = [...new Set(active.map((v) => v.color))];
+  const stock = active.reduce((sum, v) => sum + v.stock, 0);
 
   const withDiscount = variants.map((v) => ({
     ...v,

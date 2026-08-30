@@ -11,8 +11,14 @@ export class HealthController {
         endpoints: {
           health: "GET /health",
           categories: "GET /v1/categories",
+          createCategory: "POST /v1/categories",
+          updateCategory: "PUT|PATCH /v1/categories/:id",
+          deleteCategory: "DELETE /v1/categories/:id",
           products: "GET /v1/products",
           productBySlug: "GET /v1/products/:slug",
+          createProduct: "POST /v1/products",
+          updateProduct: "PUT|PATCH /v1/products/:id",
+          deleteProduct: "DELETE /v1/products/:id",
         },
       },
     };

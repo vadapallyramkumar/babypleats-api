@@ -1,68 +1,64 @@
 # Baby Pleats API
 
-Public catalog API (NestJS + Prisma + PostgreSQL). Storefront contract: [`docs/openapi.yaml`](../babypleates/docs/openapi.yaml) — **products and categories only**.
+Catalog API (NestJS + Prisma + PostgreSQL) for **products and categories**.
 
 ## Endpoints
 
 API base: [http://localhost:4000/v1](http://localhost:4000/v1)
 
+### Public (no auth)
+
 | Method | Path | Purpose |
 |---|---|---|
 | `GET` | `/health` | Liveness (no `/v1` prefix) |
 | `GET` | `/v1` | API info |
-| `GET` | `/v1/categories` | Active categories (`sortOrder`) |
+| `GET` | `/v1/categories` | Active categories |
 | `GET` | `/v1/products` | Active products (paginated) |
 | `GET` | `/v1/products/:slug` | Product detail |
 
+### Writes (API key required)
+
+Send `Authorization: Bearer <API_WRITE_KEY>` or `X-API-Key: <API_WRITE_KEY>`.
+
+| Method | Path | Purpose |
+|---|---|---|
+| `POST` | `/v1/categories` | Create category |
+| `PUT` / `PATCH` | `/v1/categories/:id` | Update category |
+| `DELETE` | `/v1/categories/:id` | Soft-delete category (`isActive: false`) |
+| `POST` | `/v1/products` | Create product |
+| `PUT` / `PATCH` | `/v1/products/:id` | Update product |
+| `DELETE` | `/v1/products/:id` | Soft-delete product (`isActive: false`) |
+
 Product query params: `category`, `featured`, `isNew`, `tag`, `q`, `page`, `limit`.
 
-Merchandising categories (`filter` on the category): `budgetFriendly`, `readyToDispatch`, `bestseller` resolve to tag/featured filters instead of `categoryId`.
+Merchandising categories (`filter`): `budgetFriendly`, `readyToDispatch`, `bestseller`.
 
-Admin, auth, media, orders, and site settings are not included in this release.
+Deletes are soft. Category delete fails if it still has active products.
 
 ## Local setup
-
-1. Copy env and start Postgres:
 
 ```bash
 cp .env.example .env
 docker compose up postgres -d
-```
-
-2. Install, migrate, seed, run:
-
-```bash
 npm install
 npx prisma migrate deploy
 npm run prisma:seed
 npm run start:dev
 ```
 
-Default admin-free catalog comes from `prisma/seed-data.json`.
+Set a strong `API_WRITE_KEY` before using write endpoints.
 
-## Docker (API + Postgres)
+## Docker
 
 ```bash
 docker compose up --build
 ```
 
-On start the API runs migrations and reseeds the catalog from `prisma/seed-data.json`.
-
 ## Deploy (Railway / Render)
 
-1. Provision PostgreSQL and set `DATABASE_URL`.
-2. Set `PORT` (the app reads it; default `4000`), `CORS_ORIGIN` (include the storefront origin, e.g. GitHub Pages).
-3. Health check path: `/health`.
-4. Deploy this repo. The image runs `prisma migrate deploy`, then seeds, then `node dist/main.js`.
-5. Point `api.babypleats.com` at the service and set storefront `NEXT_PUBLIC_API_BASE_URL=https://api.babypleats.com/v1`.
-
-Do not use SQLite in production. Catalog images in seed data are storefront-relative paths (e.g. `/images/...`); serve those from the storefront or a CDN.
-
-## Refresh seed from storefront catalog
-
-From the storefront repo:
-
-```bash
-npx tsx scripts/export-catalog-seed.ts
-cd ../babypleats-api && npm run prisma:seed
-```
+1. PostgreSQL + `DATABASE_URL`
+2. `PORT`, `CORS_ORIGIN`, `API_WRITE_KEY`
+3. Health check: `/health`
+4. Deploy; image runs `prisma migrate deploy` then `node dist/main.js` (does **not** seed)
+5. Seed once manually when needed: `npm run prisma:seed`
+6. Storefront: `NEXT_PUBLIC_API_BASE_URL=https://api.babypleats.com/v1`

@@ -23,6 +23,7 @@ services:
       DATABASE_URL: postgresql://babypleats:babypleats@postgres:5432/babypleats?schema=public
       PORT: 4000
       CORS_ORIGIN: http://localhost:3000
+      API_WRITE_KEY: ${API_WRITE_KEY}
     depends_on:
       postgres:
         condition: service_healthy
