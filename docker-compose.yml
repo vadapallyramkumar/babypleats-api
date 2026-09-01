@@ -1,6 +1,8 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:16
+    container_name: babypleats-db
+    restart: unless-stopped
     environment:
       POSTGRES_USER: babypleats
       POSTGRES_PASSWORD: babypleats
@@ -20,10 +22,15 @@ services:
     ports:
       - "4000:4000"
     environment:
-      DATABASE_URL: postgresql://babypleats:babypleats@postgres:5432/babypleats?schema=public
-      PORT: 4000
-      CORS_ORIGIN: http://localhost:3000,http://localhost:5173
-      API_WRITE_KEY: ${API_WRITE_KEY}
+      DATABASE_URL: "postgresql://babypleats:babypleats@postgres:5432/babypleats?schema=public"
+      PORT: "4000"
+      CORS_ORIGIN: "http://localhost:3000,http://localhost:5173"
+      API_WRITE_KEY: "${API_WRITE_KEY}"
+      CLOUDINARY_CLOUD_NAME: "${CLOUDINARY_CLOUD_NAME}"
+      CLOUDINARY_API_KEY: "${CLOUDINARY_API_KEY}"
+      CLOUDINARY_API_SECRET: "${CLOUDINARY_API_SECRET}"
+      CLOUDINARY_UPLOAD_PRESET: "${CLOUDINARY_UPLOAD_PRESET}"
+      CLOUDINARY_FOLDER: "${CLOUDINARY_FOLDER:-babypleates/products}"
     depends_on:
       postgres:
         condition: service_healthy

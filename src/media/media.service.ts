@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -12,12 +13,17 @@ export class MediaService {
     this.configureCloudinary();
   }
 
+  private getCloudinaryCredentials() {
+    return {
+      cloudName: this.config.get<string>('CLOUDINARY_CLOUD_NAME')?.trim(),
+      apiKey: this.config.get<string>('CLOUDINARY_API_KEY')?.trim(),
+      apiSecret: this.config.get<string>('CLOUDINARY_API_SECRET')?.trim(),
+      uploadPreset: this.config.get<string>('CLOUDINARY_UPLOAD_PRESET')?.trim(),
+    };
+  }
+
   private configureCloudinary() {
-    const cloudName = this.config.get<string>('CLOUDINARY_CLOUD_NAME')?.trim();
-
-    const apiKey = this.config.get<string>('CLOUDINARY_API_KEY')?.trim();
-
-    const apiSecret = this.config.get<string>('CLOUDINARY_API_SECRET')?.trim();
+    const { cloudName, apiKey, apiSecret } = this.getCloudinaryCredentials();
 
     if (!cloudName || !apiKey || !apiSecret) {
       return;
@@ -31,6 +37,24 @@ export class MediaService {
     });
   }
 
+  private assertCloudinaryReady(requireUploadPreset = false) {
+    const { cloudName, apiKey, apiSecret, uploadPreset } =
+      this.getCloudinaryCredentials();
+
+    if (
+      !cloudName ||
+      !apiKey ||
+      !apiSecret ||
+      (requireUploadPreset && !uploadPreset)
+    ) {
+      throw new ServiceUnavailableException('Cloudinary is not configured');
+    }
+
+    this.configureCloudinary();
+
+    return { uploadPreset: uploadPreset! };
+  }
+
   async uploadImage(file: Express.Multer.File) {
     if (!file?.buffer?.length) {
       throw new BadRequestException('Image file is required');
@@ -40,23 +64,7 @@ export class MediaService {
       throw new BadRequestException('Only image files are supported');
     }
 
-    const cloudName = this.config.get<string>('CLOUDINARY_CLOUD_NAME')?.trim();
-
-    const apiKey = this.config.get<string>('CLOUDINARY_API_KEY')?.trim();
-
-    const apiSecret = this.config.get<string>('CLOUDINARY_API_SECRET')?.trim();
-
-    const uploadPreset = this.config
-      .get<string>('CLOUDINARY_UPLOAD_PRESET')
-      ?.trim();
-
-    if (!cloudName || !apiKey || !apiSecret || !uploadPreset) {
-      throw new ServiceUnavailableException(
-        'Cloudinary upload is not configured',
-      );
-    }
-
-    this.configureCloudinary();
+    const { uploadPreset } = this.assertCloudinaryReady(true);
 
     const folder =
       this.config.get<string>('CLOUDINARY_FOLDER')?.trim() ||
@@ -100,6 +108,40 @@ export class MediaService {
       width: result.width,
       height: result.height,
       bytes: result.bytes,
+    };
+  }
+
+  async deleteImage(publicId: string) {
+    const id = publicId?.trim();
+
+    if (!id) {
+      throw new BadRequestException('publicId is required');
+    }
+
+    this.assertCloudinaryReady(false);
+
+    const result = await cloudinary.uploader
+      .destroy(id, { resource_type: 'image' })
+      .catch((error: unknown) => {
+        const message =
+          error instanceof Error ? error.message : 'Cloudinary delete failed';
+
+        throw new BadRequestException(message);
+      });
+
+    if (result.result === 'not found') {
+      throw new NotFoundException(`Image not found: ${id}`);
+    }
+
+    if (result.result !== 'ok') {
+      throw new BadRequestException(
+        `Cloudinary delete failed: ${result.result ?? 'unknown'}`,
+      );
+    }
+
+    return {
+      publicId: id,
+      deleted: true,
     };
   }
 }
