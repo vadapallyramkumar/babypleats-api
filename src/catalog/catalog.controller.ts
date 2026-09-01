@@ -10,18 +10,15 @@ import {
   Put,
   Query,
   UseGuards,
-} from "@nestjs/common";
-import { ApiKeyGuard } from "../auth/api-key.guard";
-import { CatalogService } from "./catalog.service";
-import type {
-  CategoryWriteBody,
-  ProductWriteBody,
-} from "./catalog.service";
+} from '@nestjs/common';
+import { ApiKeyGuard } from '../auth/api-key.guard';
+import { CatalogService } from './catalog.service';
+import type { CategoryWriteBody, ProductWriteBody } from './catalog.service';
 
 function parseBool(v?: string): boolean | undefined {
   if (v === undefined) return undefined;
-  if (v === "true" || v === "1") return true;
-  if (v === "false" || v === "0") return false;
+  if (v === 'true' || v === '1') return true;
+  if (v === 'false' || v === '0') return false;
   return undefined;
 }
 
@@ -29,13 +26,13 @@ function parseBool(v?: string): boolean | undefined {
 export class CatalogController {
   constructor(private readonly catalog: CatalogService) {}
 
-  @Get("categories")
+  @Get('categories')
   async listCategories() {
     const data = await this.catalog.listCategories();
     return { data };
   }
 
-  @Post("categories")
+  @Post('categories')
   @UseGuards(ApiKeyGuard)
   @HttpCode(201)
   async createCategory(@Body() body: CategoryWriteBody) {
@@ -43,42 +40,42 @@ export class CatalogController {
     return { data };
   }
 
-  @Patch("categories/:id")
+  @Patch('categories/:id')
   @UseGuards(ApiKeyGuard)
   async patchCategory(
-    @Param("id") id: string,
-    @Body() body: Partial<CategoryWriteBody>
+    @Param('id') id: string,
+    @Body() body: Partial<CategoryWriteBody>,
   ) {
     const data = await this.catalog.updateCategory(id, body);
     return { data };
   }
 
-  @Put("categories/:id")
+  @Put('categories/:id')
   @UseGuards(ApiKeyGuard)
   async putCategory(
-    @Param("id") id: string,
-    @Body() body: Partial<CategoryWriteBody>
+    @Param('id') id: string,
+    @Body() body: Partial<CategoryWriteBody>,
   ) {
     const data = await this.catalog.updateCategory(id, body);
     return { data };
   }
 
-  @Delete("categories/:id")
+  @Delete('categories/:id')
   @UseGuards(ApiKeyGuard)
   @HttpCode(204)
-  async deleteCategory(@Param("id") id: string) {
+  async deleteCategory(@Param('id') id: string) {
     await this.catalog.deleteCategory(id);
   }
 
-  @Get("products")
+  @Get('products')
   async listProducts(
-    @Query("category") category?: string,
-    @Query("featured") featured?: string,
-    @Query("isNew") isNew?: string,
-    @Query("tag") tag?: string,
-    @Query("q") q?: string,
-    @Query("page") page?: string,
-    @Query("limit") limit?: string
+    @Query('category') category?: string,
+    @Query('featured') featured?: string,
+    @Query('isNew') isNew?: string,
+    @Query('tag') tag?: string,
+    @Query('q') q?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
   ) {
     return this.catalog.listProducts({
       category,
@@ -91,7 +88,7 @@ export class CatalogController {
     });
   }
 
-  @Post("products")
+  @Post('products')
   @UseGuards(ApiKeyGuard)
   @HttpCode(201)
   async createProduct(@Body() body: ProductWriteBody) {
@@ -99,36 +96,36 @@ export class CatalogController {
     return { data };
   }
 
-  @Get("products/:slug")
-  async getProduct(@Param("slug") slug: string) {
+  @Get('products/:slug')
+  async getProduct(@Param('slug') slug: string) {
     const data = await this.catalog.getProductBySlug(slug);
     return { data };
   }
 
-  @Patch("products/:id")
+  @Patch('products/:id')
   @UseGuards(ApiKeyGuard)
   async patchProduct(
-    @Param("id") id: string,
-    @Body() body: Partial<ProductWriteBody>
+    @Param('id') id: string,
+    @Body() body: Partial<ProductWriteBody>,
   ) {
     const data = await this.catalog.updateProduct(id, body);
     return { data };
   }
 
-  @Put("products/:id")
+  @Put('products/:id')
   @UseGuards(ApiKeyGuard)
   async putProduct(
-    @Param("id") id: string,
-    @Body() body: Partial<ProductWriteBody>
+    @Param('id') id: string,
+    @Body() body: Partial<ProductWriteBody>,
   ) {
     const data = await this.catalog.updateProduct(id, body);
     return { data };
   }
 
-  @Delete("products/:id")
+  @Delete('products/:id')
   @UseGuards(ApiKeyGuard)
   @HttpCode(204)
-  async deleteProduct(@Param("id") id: string) {
+  async deleteProduct(@Param('id') id: string) {
     await this.catalog.deleteProduct(id);
   }
 }

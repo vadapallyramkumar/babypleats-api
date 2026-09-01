@@ -3,7 +3,7 @@ export type ApiVariant = {
   sku: string;
   size: string;
   color: string;
-  price: { selling: number; original?: number; currency: "INR" };
+  price: { selling: number; original?: number; currency: 'INR' };
   stock: number;
   isActive: boolean;
   image?: string;
@@ -100,9 +100,9 @@ export function mapProduct(row: ProductRow, includeInactiveVariants = false) {
     ? {
         selling: min.price.selling,
         ...(min.price.original != null ? { original: min.price.original } : {}),
-        currency: "INR" as const,
+        currency: 'INR' as const,
       }
-    : { selling: 0, currency: "INR" as const };
+    : { selling: 0, currency: 'INR' as const };
 
   const sizes = [...new Set(active.map((v) => v.size))];
   const colors = [...new Set(active.map((v) => v.color))];

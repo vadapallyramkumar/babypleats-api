@@ -3,9 +3,9 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-} from "@nestjs/common";
-import { Prisma } from "@prisma/client";
-import { PrismaService } from "../prisma/prisma.service";
+} from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
 import {
   ApiVariant,
   ColorGallery,
@@ -16,7 +16,7 @@ import {
   serializeImages,
   serializeTags,
   serializeVariants,
-} from "../common/mappers";
+} from '../common/mappers';
 
 export type CategoryWriteBody = {
   id?: string;
@@ -56,7 +56,7 @@ export class CatalogService {
   async listCategories(activeOnly = true) {
     const rows = await this.prisma.category.findMany({
       where: activeOnly ? { isActive: true } : undefined,
-      orderBy: { sortOrder: "asc" },
+      orderBy: { sortOrder: 'asc' },
     });
     return rows.map(mapCategory);
   }
@@ -78,7 +78,7 @@ export class CatalogService {
       limit?: number;
       isActive?: boolean;
     },
-    opts: { includeInactive?: boolean } = {}
+    opts: { includeInactive?: boolean } = {},
   ) {
     const page = Math.max(1, Number(query.page) || 1);
     const limit = Math.min(100, Math.max(1, Number(query.limit) || 24));
@@ -95,12 +95,12 @@ export class CatalogService {
 
     if (query.category) {
       const cat = await this.getCategoryBySlug(query.category);
-      if (cat?.filter === "bestseller") {
+      if (cat?.filter === 'bestseller') {
         where.featured = true;
-      } else if (cat?.filter === "readyToDispatch") {
-        where.tags = { contains: "ready-to-dispatch" };
-      } else if (cat?.filter === "budgetFriendly") {
-        where.tags = { contains: "budget-friendly" };
+      } else if (cat?.filter === 'readyToDispatch') {
+        where.tags = { contains: 'ready-to-dispatch' };
+      } else if (cat?.filter === 'budgetFriendly') {
+        where.tags = { contains: 'budget-friendly' };
       } else {
         where.categoryId = cat?.id ?? query.category;
       }
@@ -124,7 +124,7 @@ export class CatalogService {
       this.prisma.product.count({ where }),
       this.prisma.product.findMany({
         where,
-        orderBy: { updatedAt: "desc" },
+        orderBy: { updatedAt: 'desc' },
         skip: (page - 1) * limit,
         take: limit,
       }),
@@ -139,21 +139,21 @@ export class CatalogService {
   async getProductBySlug(slug: string) {
     const row = await this.prisma.product.findUnique({ where: { slug } });
     if (!row || !row.isActive) {
-      throw new NotFoundException("Product not found");
+      throw new NotFoundException('Product not found');
     }
     return mapProduct(row);
   }
 
   async getProductById(id: string) {
     const row = await this.prisma.product.findUnique({ where: { id } });
-    if (!row) throw new NotFoundException("Product not found");
+    if (!row) throw new NotFoundException('Product not found');
     return mapProduct(row, true);
   }
 
   async createCategory(body: CategoryWriteBody) {
     this.assertCategoryFilter(body.filter);
     if (!body.slug?.trim() || !body.name?.trim() || !body.image?.trim()) {
-      throw new BadRequestException("slug, name, and image are required");
+      throw new BadRequestException('slug, name, and image are required');
     }
     const id = body.id ?? body.slug;
     try {
@@ -163,7 +163,7 @@ export class CatalogService {
           slug: body.slug,
           name: body.name,
           image: body.image,
-          description: body.description ?? "",
+          description: body.description ?? '',
           sortOrder: body.sortOrder ?? 0,
           isActive: body.isActive ?? true,
           filter: body.filter ?? null,
@@ -173,9 +173,9 @@ export class CatalogService {
     } catch (e) {
       if (
         e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === "P2002"
+        e.code === 'P2002'
       ) {
-        throw new ConflictException("Category id or slug already exists");
+        throw new ConflictException('Category id or slug already exists');
       }
       throw e;
     }
@@ -183,12 +183,12 @@ export class CatalogService {
 
   async updateCategory(id: string, body: Partial<CategoryWriteBody>) {
     this.assertCategoryFilter(body.filter);
-    this.assertNonEmptyString(body.slug, "slug");
-    this.assertNonEmptyString(body.name, "name");
-    this.assertNonEmptyString(body.image, "image");
+    this.assertNonEmptyString(body.slug, 'slug');
+    this.assertNonEmptyString(body.name, 'name');
+    this.assertNonEmptyString(body.image, 'image');
 
     const existing = await this.prisma.category.findUnique({ where: { id } });
-    if (!existing) throw new NotFoundException("Category not found");
+    if (!existing) throw new NotFoundException('Category not found');
 
     try {
       const row = await this.prisma.category.update({
@@ -200,7 +200,9 @@ export class CatalogService {
           ...(body.description !== undefined
             ? { description: body.description }
             : {}),
-          ...(body.sortOrder !== undefined ? { sortOrder: body.sortOrder } : {}),
+          ...(body.sortOrder !== undefined
+            ? { sortOrder: body.sortOrder }
+            : {}),
           ...(body.isActive !== undefined ? { isActive: body.isActive } : {}),
           ...(body.filter !== undefined ? { filter: body.filter } : {}),
         },
@@ -209,9 +211,9 @@ export class CatalogService {
     } catch (e) {
       if (
         e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === "P2002"
+        e.code === 'P2002'
       ) {
-        throw new ConflictException("Category slug already exists");
+        throw new ConflictException('Category slug already exists');
       }
       throw e;
     }
@@ -219,14 +221,14 @@ export class CatalogService {
 
   async deleteCategory(id: string) {
     const existing = await this.prisma.category.findUnique({ where: { id } });
-    if (!existing) throw new NotFoundException("Category not found");
+    if (!existing) throw new NotFoundException('Category not found');
 
     const productCount = await this.prisma.product.count({
       where: { categoryId: id, isActive: true },
     });
     if (productCount > 0) {
       throw new ConflictException(
-        "Category has active products; deactivate or reassign them first"
+        'Category has active products; deactivate or reassign them first',
       );
     }
 
@@ -254,9 +256,9 @@ export class CatalogService {
     } catch (e) {
       if (
         e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === "P2002"
+        e.code === 'P2002'
       ) {
-        throw new ConflictException("Product id or slug already exists");
+        throw new ConflictException('Product id or slug already exists');
       }
       throw e;
     }
@@ -264,7 +266,7 @@ export class CatalogService {
 
   async updateProduct(id: string, body: Partial<ProductWriteBody>) {
     const existing = await this.prisma.product.findUnique({ where: { id } });
-    if (!existing) throw new NotFoundException("Product not found");
+    if (!existing) throw new NotFoundException('Product not found');
 
     if (body.categoryId) {
       const category = await this.prisma.category.findUnique({
@@ -285,18 +287,14 @@ export class CatalogService {
           : existing.subcategory,
       description: body.description ?? existing.description,
       fabric: body.fabric !== undefined ? body.fabric : existing.fabric,
-      care:
-        body.care ??
-        (JSON.parse(existing.care || "[]") as string[]),
-      images:
-        body.images ??
-        (JSON.parse(existing.images || "[]") as string[]),
+      care: body.care ?? (JSON.parse(existing.care || '[]') as string[]),
+      images: body.images ?? (JSON.parse(existing.images || '[]') as string[]),
       colorGalleries:
         body.colorGalleries ??
-        (JSON.parse(existing.colorGalleries || "[]") as ColorGallery[]),
+        (JSON.parse(existing.colorGalleries || '[]') as ColorGallery[]),
       variants:
         body.variants ??
-        (JSON.parse(existing.variants || "[]") as ApiVariant[]),
+        (JSON.parse(existing.variants || '[]') as ApiVariant[]),
       isNew: body.isNew ?? existing.isNew,
       featured: body.featured ?? existing.featured,
       isActive: body.isActive ?? existing.isActive,
@@ -305,7 +303,7 @@ export class CatalogService {
         body.reviewsCount !== undefined
           ? body.reviewsCount
           : existing.reviewsCount,
-      tags: body.tags ?? (JSON.parse(existing.tags || "[]") as string[]),
+      tags: body.tags ?? (JSON.parse(existing.tags || '[]') as string[]),
     };
 
     this.assertProductWrite(merged);
@@ -319,9 +317,9 @@ export class CatalogService {
     } catch (e) {
       if (
         e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === "P2002"
+        e.code === 'P2002'
       ) {
-        throw new ConflictException("Product slug already exists");
+        throw new ConflictException('Product slug already exists');
       }
       throw e;
     }
@@ -336,9 +334,9 @@ export class CatalogService {
     } catch (e) {
       if (
         e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === "P2025"
+        e.code === 'P2025'
       ) {
-        throw new NotFoundException("Product not found");
+        throw new NotFoundException('Product not found');
       }
       throw e;
     }
@@ -368,30 +366,30 @@ export class CatalogService {
 
   private assertNonEmptyString(value: string | undefined, field: string) {
     if (value === undefined) return;
-    if (typeof value !== "string" || !value.trim()) {
+    if (typeof value !== 'string' || !value.trim()) {
       throw new BadRequestException(`${field} must be a non-empty string`);
     }
   }
 
   private assertCategoryFilter(filter?: string | null) {
-    if (filter == null || filter === "") return;
-    const allowed = ["budgetFriendly", "readyToDispatch", "bestseller"];
+    if (filter == null || filter === '') return;
+    const allowed = ['budgetFriendly', 'readyToDispatch', 'bestseller'];
     if (!allowed.includes(filter)) {
       throw new BadRequestException(
-        `filter must be one of: ${allowed.join(", ")}`
+        `filter must be one of: ${allowed.join(', ')}`,
       );
     }
   }
 
   private assertProductWrite(body: ProductWriteBody) {
     if (!body.slug?.trim() || !body.name?.trim() || !body.categoryId?.trim()) {
-      throw new BadRequestException("slug, name, and categoryId are required");
+      throw new BadRequestException('slug, name, and categoryId are required');
     }
     if (!body.images?.length) {
-      throw new BadRequestException("images must include at least one URL");
+      throw new BadRequestException('images must include at least one URL');
     }
     if (!body.variants?.length) {
-      throw new BadRequestException("variants must include at least one item");
+      throw new BadRequestException('variants must include at least one item');
     }
   }
 }

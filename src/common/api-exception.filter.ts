@@ -4,8 +4,8 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
-} from "@nestjs/common";
-import { Response } from "express";
+} from '@nestjs/common';
+import { Response } from 'express';
 
 @Catch()
 export class ApiExceptionFilter implements ExceptionFilter {
@@ -17,30 +17,30 @@ export class ApiExceptionFilter implements ExceptionFilter {
       const status = exception.getStatus();
       const body = exception.getResponse();
       const message =
-        typeof body === "string"
+        typeof body === 'string'
           ? body
           : ((body as { message?: string | string[] }).message ??
             exception.message);
       const details =
-        typeof body === "object" && body !== null && "details" in body
-          ? (body as { details: unknown }).details
+        typeof body === 'object' && body !== null && 'details' in body
+          ? body.details
           : Array.isArray(message)
             ? message
             : null;
 
       const codeMap: Record<number, string> = {
-        400: "VALIDATION_ERROR",
-        401: "UNAUTHORIZED",
-        403: "FORBIDDEN",
-        404: "NOT_FOUND",
-        409: "CONFLICT",
-        429: "RATE_LIMITED",
+        400: 'VALIDATION_ERROR',
+        401: 'UNAUTHORIZED',
+        403: 'FORBIDDEN',
+        404: 'NOT_FOUND',
+        409: 'CONFLICT',
+        429: 'RATE_LIMITED',
       };
 
       return res.status(status).json({
         error: {
-          code: codeMap[status] ?? "INTERNAL_ERROR",
-          message: Array.isArray(message) ? message.join("; ") : message,
+          code: codeMap[status] ?? 'INTERNAL_ERROR',
+          message: Array.isArray(message) ? message.join('; ') : message,
           details,
         },
       });
@@ -49,8 +49,8 @@ export class ApiExceptionFilter implements ExceptionFilter {
     console.error(exception);
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       error: {
-        code: "INTERNAL_ERROR",
-        message: "Unexpected server fault",
+        code: 'INTERNAL_ERROR',
+        message: 'Unexpected server fault',
         details: null,
       },
     });
