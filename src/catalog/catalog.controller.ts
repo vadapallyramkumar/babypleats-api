@@ -13,7 +13,12 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CatalogService } from './catalog.service';
-import type { CategoryWriteBody, ProductWriteBody } from './catalog.service';
+import {
+  CreateCategoryDto,
+  CreateProductDto,
+  UpdateCategoryDto,
+  UpdateProductDto,
+} from './dto/catalog-write.dto';
 
 function parseBool(v?: string): boolean | undefined {
   if (v === undefined) return undefined;
@@ -39,7 +44,7 @@ export class CatalogController {
   @Post('categories')
   @UseGuards(JwtAuthGuard)
   @HttpCode(201)
-  async createCategory(@Body() body: CategoryWriteBody) {
+  async createCategory(@Body() body: CreateCategoryDto) {
     const data = await this.catalog.createCategory(body);
     return { data };
   }
@@ -48,7 +53,7 @@ export class CatalogController {
   @UseGuards(JwtAuthGuard)
   async patchCategory(
     @Param('id') id: string,
-    @Body() body: Partial<CategoryWriteBody>,
+    @Body() body: UpdateCategoryDto,
   ) {
     const data = await this.catalog.updateCategory(id, body);
     return { data };
@@ -58,7 +63,7 @@ export class CatalogController {
   @UseGuards(JwtAuthGuard)
   async putCategory(
     @Param('id') id: string,
-    @Body() body: Partial<CategoryWriteBody>,
+    @Body() body: UpdateCategoryDto,
   ) {
     const data = await this.catalog.updateCategory(id, body);
     return { data };
@@ -99,7 +104,7 @@ export class CatalogController {
   @Post('products')
   @UseGuards(JwtAuthGuard)
   @HttpCode(201)
-  async createProduct(@Body() body: ProductWriteBody) {
+  async createProduct(@Body() body: CreateProductDto) {
     const data = await this.catalog.createProduct(body);
     return { data };
   }
@@ -120,7 +125,7 @@ export class CatalogController {
   @UseGuards(JwtAuthGuard)
   async patchProduct(
     @Param('id') id: string,
-    @Body() body: Partial<ProductWriteBody>,
+    @Body() body: UpdateProductDto,
   ) {
     const data = await this.catalog.updateProduct(id, body);
     return { data };
@@ -130,7 +135,7 @@ export class CatalogController {
   @UseGuards(JwtAuthGuard)
   async putProduct(
     @Param('id') id: string,
-    @Body() body: Partial<ProductWriteBody>,
+    @Body() body: UpdateProductDto,
   ) {
     const data = await this.catalog.updateProduct(id, body);
     return { data };

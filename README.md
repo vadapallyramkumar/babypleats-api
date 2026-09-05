@@ -53,7 +53,7 @@ Send `Authorization: Bearer <accessToken>` from admin login.
 | `POST` | `/v1/home/social-links` | Create social link |
 | `PATCH` | `/v1/home/social-links/:id` | Update social link |
 | `DELETE` | `/v1/home/social-links/:id` | Delete social link |
-| `POST` | `/v1/media/upload` | Upload image or video (`multipart/form-data` field `file`, max 50MB) → Cloudinary |
+| `POST` | `/v1/media/upload` | Upload image or video (`multipart/form-data` field `file`) → Cloudinary. Allowed: jpeg/png/webp/gif (≤10MB), mp4/webm/mov (≤50MB). Content is checked via magic bytes. |
 | `DELETE` | `/v1/media` | Delete media (`{ "publicId": "...", "resourceType": "image"|"video" }` — `resourceType` optional, defaults to `image`) |
 
 Product query params: `category`, `featured`, `isNew`, `tag`, `q`, `page`, `limit`.
@@ -96,7 +96,7 @@ docker compose up --build
 ## Deploy (Railway / Render)
 
 1. PostgreSQL + `DATABASE_URL`
-2. `PORT`, `CORS_ORIGIN`, `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` (optional `ADMIN_NAME`, `JWT_EXPIRES_IN`)
+2. `PORT`, `CORS_ORIGIN`, `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` (optional `ADMIN_NAME`, `JWT_EXPIRES_IN`, `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE`)
 3. Cloudinary: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `CLOUDINARY_UPLOAD_PRESET` (optional `CLOUDINARY_FOLDER`)
 4. Health check: `/health`
 5. Deploy; image runs `prisma migrate deploy` then `node dist/main.js` (does **not** seed catalog; admin owner is created on first boot from env if missing)

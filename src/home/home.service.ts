@@ -11,28 +11,20 @@ import {
   mapSocialLink,
 } from './home.mappers';
 
+import type {
+  CreateHeroImageDto,
+  CreatePromotionalMessageDto,
+  CreateSocialLinkDto,
+  UpdateHeroImageDto,
+  UpdatePromotionalMessageDto,
+  UpdateSocialLinkDto,
+} from './dto/home-write.dto';
+
 const SOCIAL_MEDIA_TYPES = new Set<string>(Object.values(SocialMediaType));
 
-export type HeroImageWriteBody = {
-  url: string;
-  mobileUrl?: string | null;
-  alt: string;
-  order?: number;
-  active?: boolean;
-};
-
-export type PromotionalMessageWriteBody = {
-  message: string;
-  order?: number;
-  active?: boolean;
-};
-
-export type SocialLinkWriteBody = {
-  url: string;
-  type: SocialMediaType | string;
-  order?: number;
-  active?: boolean;
-};
+export type HeroImageWriteBody = CreateHeroImageDto;
+export type PromotionalMessageWriteBody = CreatePromotionalMessageDto;
+export type SocialLinkWriteBody = CreateSocialLinkDto;
 
 function assertNonEmptyString(value: unknown, field: string): string {
   if (typeof value !== 'string' || !value.trim()) {
@@ -120,7 +112,7 @@ export class HomeService {
     return mapHeroImage(row);
   }
 
-  async updateHeroImage(id: string, body: Partial<HeroImageWriteBody>) {
+  async updateHeroImage(id: string, body: UpdateHeroImageDto) {
     await this.requireHero(id);
     const data = this.parseHeroUpdate(body);
     const row = await this.prisma.heroImage.update({ where: { id }, data });
@@ -158,7 +150,7 @@ export class HomeService {
 
   async updatePromotionalMessage(
     id: string,
-    body: Partial<PromotionalMessageWriteBody>,
+    body: UpdatePromotionalMessageDto,
   ) {
     await this.requirePromo(id);
     const data = this.parsePromoUpdate(body);
@@ -196,7 +188,7 @@ export class HomeService {
     return mapSocialLink(row);
   }
 
-  async updateSocialLink(id: string, body: Partial<SocialLinkWriteBody>) {
+  async updateSocialLink(id: string, body: UpdateSocialLinkDto) {
     await this.requireSocial(id);
     const data = this.parseSocialUpdate(body);
     const row = await this.prisma.socialLink.update({ where: { id }, data });
@@ -243,7 +235,7 @@ export class HomeService {
   }
 
   private parseHeroUpdate(
-    body: Partial<HeroImageWriteBody>,
+    body: UpdateHeroImageDto,
   ): Prisma.HeroImageUpdateInput {
     const data: Prisma.HeroImageUpdateInput = {};
     if (body.url !== undefined) data.url = assertHttpUrl(body.url, 'url');
@@ -275,7 +267,7 @@ export class HomeService {
   }
 
   private parsePromoUpdate(
-    body: Partial<PromotionalMessageWriteBody>,
+    body: UpdatePromotionalMessageDto,
   ): Prisma.PromotionalMessageUpdateInput {
     const data: Prisma.PromotionalMessageUpdateInput = {};
     if (body.message !== undefined) {
@@ -305,7 +297,7 @@ export class HomeService {
   }
 
   private parseSocialUpdate(
-    body: Partial<SocialLinkWriteBody>,
+    body: UpdateSocialLinkDto,
   ): Prisma.SocialLinkUpdateInput {
     const data: Prisma.SocialLinkUpdateInput = {};
     if (body.url !== undefined) data.url = assertHttpUrl(body.url, 'url');

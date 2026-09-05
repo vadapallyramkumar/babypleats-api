@@ -11,12 +11,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import {
+  CreateHeroImageDto,
+  CreatePromotionalMessageDto,
+  CreateSocialLinkDto,
+  UpdateHeroImageDto,
+  UpdatePromotionalMessageDto,
+  UpdateSocialLinkDto,
+} from './dto/home-write.dto';
 import { HomeService } from './home.service';
-import type {
-  HeroImageWriteBody,
-  PromotionalMessageWriteBody,
-  SocialLinkWriteBody,
-} from './home.service';
 
 function parseBool(v?: string): boolean | undefined {
   if (v === undefined) return undefined;
@@ -52,7 +55,7 @@ export class HomeController {
   @Post('hero-images')
   @UseGuards(JwtAuthGuard)
   @HttpCode(201)
-  async createHeroImage(@Body() body: HeroImageWriteBody) {
+  async createHeroImage(@Body() body: CreateHeroImageDto) {
     const data = await this.home.createHeroImage(body);
     return ok(data, 'Hero image created successfully');
   }
@@ -61,7 +64,7 @@ export class HomeController {
   @UseGuards(JwtAuthGuard)
   async patchHeroImage(
     @Param('id') id: string,
-    @Body() body: Partial<HeroImageWriteBody>,
+    @Body() body: UpdateHeroImageDto,
   ) {
     const data = await this.home.updateHeroImage(id, body);
     return ok(data, 'Hero image updated successfully');
@@ -95,7 +98,7 @@ export class HomeController {
   @Post('promotional-messages')
   @UseGuards(JwtAuthGuard)
   @HttpCode(201)
-  async createPromotionalMessage(@Body() body: PromotionalMessageWriteBody) {
+  async createPromotionalMessage(@Body() body: CreatePromotionalMessageDto) {
     const data = await this.home.createPromotionalMessage(body);
     return ok(data, 'Promotional message created successfully');
   }
@@ -104,7 +107,7 @@ export class HomeController {
   @UseGuards(JwtAuthGuard)
   async patchPromotionalMessage(
     @Param('id') id: string,
-    @Body() body: Partial<PromotionalMessageWriteBody>,
+    @Body() body: UpdatePromotionalMessageDto,
   ) {
     const data = await this.home.updatePromotionalMessage(id, body);
     return ok(data, 'Promotional message updated successfully');
@@ -136,7 +139,7 @@ export class HomeController {
   @Post('social-links')
   @UseGuards(JwtAuthGuard)
   @HttpCode(201)
-  async createSocialLink(@Body() body: SocialLinkWriteBody) {
+  async createSocialLink(@Body() body: CreateSocialLinkDto) {
     const data = await this.home.createSocialLink(body);
     return ok(data, 'Social link created successfully');
   }
@@ -145,7 +148,7 @@ export class HomeController {
   @UseGuards(JwtAuthGuard)
   async patchSocialLink(
     @Param('id') id: string,
-    @Body() body: Partial<SocialLinkWriteBody>,
+    @Body() body: UpdateSocialLinkDto,
   ) {
     const data = await this.home.updateSocialLink(id, body);
     return ok(data, 'Social link updated successfully');

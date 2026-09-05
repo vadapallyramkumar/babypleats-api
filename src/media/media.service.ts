@@ -6,6 +6,10 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
+import {
+  MAX_VIDEO_BYTES,
+  validateUploadedMedia,
+} from './media.validation';
 
 type MediaResourceType = 'image' | 'video';
 
@@ -57,24 +61,8 @@ export class MediaService {
     return { uploadPreset: uploadPreset! };
   }
 
-  private resolveResourceType(mimetype: string): MediaResourceType {
-    if (mimetype.startsWith('image/')) {
-      return 'image';
-    }
-
-    if (mimetype.startsWith('video/')) {
-      return 'video';
-    }
-
-    throw new BadRequestException('Only image and video files are supported');
-  }
-
   async upload(file: Express.Multer.File) {
-    if (!file?.buffer?.length) {
-      throw new BadRequestException('Media file is required');
-    }
-
-    const resourceType = this.resolveResourceType(file.mimetype ?? '');
+    const { file: validated, resourceType } = await validateUploadedMedia(file);
     const { uploadPreset } = this.assertCloudinaryReady(true);
 
     const folder =
@@ -103,7 +91,7 @@ export class MediaService {
         },
       );
 
-      stream.end(file.buffer);
+      stream.end(validated.buffer);
     }).catch((error) => {
       const message =
         error instanceof Error ? error.message : 'Cloudinary upload failed';
@@ -182,5 +170,7 @@ export class MediaService {
       resourceType: type,
     };
   }
-
 }
+
+/** Multer absolute ceiling (video max). Per-type limits enforced after upload. */
+export const MEDIA_UPLOAD_LIMIT_BYTES = MAX_VIDEO_BYTES;

@@ -17,37 +17,15 @@ import {
   serializeTags,
   serializeVariants,
 } from '../common/mappers';
+import type {
+  CreateCategoryDto,
+  CreateProductDto,
+  UpdateCategoryDto,
+  UpdateProductDto,
+} from './dto/catalog-write.dto';
 
-export type CategoryWriteBody = {
-  id?: string;
-  slug: string;
-  name: string;
-  image: string;
-  description: string;
-  sortOrder?: number;
-  isActive?: boolean;
-  filter?: string | null;
-};
-
-export type ProductWriteBody = {
-  id?: string;
-  slug: string;
-  name: string;
-  categoryId: string;
-  subcategory?: string | null;
-  description: string;
-  fabric?: string | null;
-  care?: string[];
-  images: string[];
-  colorGalleries?: ColorGallery[];
-  variants: ApiVariant[];
-  isNew?: boolean;
-  featured?: boolean;
-  isActive?: boolean;
-  rating?: number | null;
-  reviewsCount?: number | null;
-  tags?: string[];
-};
+export type CategoryWriteBody = CreateCategoryDto;
+export type ProductWriteBody = CreateProductDto;
 
 @Injectable()
 export class CatalogService {
@@ -181,7 +159,7 @@ export class CatalogService {
     }
   }
 
-  async updateCategory(id: string, body: Partial<CategoryWriteBody>) {
+  async updateCategory(id: string, body: UpdateCategoryDto) {
     this.assertCategoryFilter(body.filter);
     this.assertNonEmptyString(body.slug, 'slug');
     this.assertNonEmptyString(body.name, 'name');
@@ -261,7 +239,7 @@ export class CatalogService {
     }
   }
 
-  async updateProduct(id: string, body: Partial<ProductWriteBody>) {
+  async updateProduct(id: string, body: UpdateProductDto) {
     const existing = await this.prisma.product.findUnique({ where: { id } });
     if (!existing) throw new NotFoundException('Product not found');
 
