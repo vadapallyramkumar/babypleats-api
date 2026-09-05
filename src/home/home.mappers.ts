@@ -31,9 +31,8 @@ export function mapPromotionalMessage(row: PromotionalMessage) {
 export function mapSocialLink(row: SocialLink) {
   return {
     id: row.id,
-    platform: row.platform,
     url: row.url,
-    icon: row.icon,
+    type: row.type,
     order: row.sortOrder,
     active: row.isActive,
     createdAt: row.createdAt.toISOString(),

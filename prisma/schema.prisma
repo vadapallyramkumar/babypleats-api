@@ -45,12 +45,9 @@ model Product {
   updatedAt      DateTime @updatedAt
 }
 
-enum SocialPlatform {
-  instagram
-  facebook
-  youtube
-  whatsapp
-  twitter
+enum SocialMediaType {
+  image
+  video
 }
 
 model HeroImage {
@@ -74,14 +71,11 @@ model PromotionalMessage {
 }
 
 model SocialLink {
-  id        String         @id @default(uuid())
-  platform  SocialPlatform
+  id        String          @id @default(uuid())
   url       String
-  icon      String
-  sortOrder Int            @default(0)
-  isActive  Boolean        @default(true)
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-
-  @@unique([platform])
+  type      SocialMediaType
+  sortOrder Int             @default(0)
+  isActive  Boolean         @default(true)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
 }

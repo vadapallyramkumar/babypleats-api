@@ -1,4 +1,4 @@
-import { PrismaClient, SocialPlatform } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -128,33 +128,28 @@ async function main() {
   }
 
   const socialLinks: Array<{
-    platform: SocialPlatform;
     url: string;
-    icon: string;
+    type: "image" | "video";
     sortOrder: number;
   }> = [
     {
-      platform: SocialPlatform.instagram,
-      url: "https://instagram.com/babypleats",
-      icon: "instagram",
+      url: "https://instagram.com/p/example1",
+      type: "image",
       sortOrder: 1,
     },
     {
-      platform: SocialPlatform.facebook,
-      url: "https://facebook.com/babypleats",
-      icon: "facebook",
+      url: "https://instagram.com/p/example2",
+      type: "image",
       sortOrder: 2,
     },
     {
-      platform: SocialPlatform.youtube,
-      url: "https://youtube.com/@babypleats",
-      icon: "youtube",
+      url: "https://youtube.com/watch?v=example",
+      type: "video",
       sortOrder: 3,
     },
     {
-      platform: SocialPlatform.whatsapp,
-      url: "https://wa.me/910000000000",
-      icon: "whatsapp",
+      url: "https://instagram.com/reel/example",
+      type: "video",
       sortOrder: 4,
     },
   ];

@@ -1,10 +1,9 @@
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma, SocialPlatform } from '@prisma/client';
+import { Prisma, SocialMediaType } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   mapHeroImage,
@@ -12,7 +11,7 @@ import {
   mapSocialLink,
 } from './home.mappers';
 
-const SOCIAL_PLATFORMS = new Set<string>(Object.values(SocialPlatform));
+const SOCIAL_MEDIA_TYPES = new Set<string>(Object.values(SocialMediaType));
 
 export type HeroImageWriteBody = {
   url: string;
@@ -29,9 +28,8 @@ export type PromotionalMessageWriteBody = {
 };
 
 export type SocialLinkWriteBody = {
-  platform: SocialPlatform | string;
   url: string;
-  icon?: string;
+  type: SocialMediaType | string;
   order?: number;
   active?: boolean;
 };
@@ -86,14 +84,14 @@ function assertOptionalBool(
   return value;
 }
 
-function assertPlatform(value: unknown): SocialPlatform {
-  const raw = assertNonEmptyString(value, 'platform').toLowerCase();
-  if (!SOCIAL_PLATFORMS.has(raw)) {
+function assertMediaType(value: unknown): SocialMediaType {
+  const raw = assertNonEmptyString(value, 'type').toLowerCase();
+  if (!SOCIAL_MEDIA_TYPES.has(raw)) {
     throw new BadRequestException(
-      `platform must be one of: ${[...SOCIAL_PLATFORMS].join(', ')}`,
+      `type must be one of: ${[...SOCIAL_MEDIA_TYPES].join(', ')}`,
     );
   }
-  return raw as SocialPlatform;
+  return raw as SocialMediaType;
 }
 
 @Injectable()
@@ -194,23 +192,15 @@ export class HomeService {
 
   async createSocialLink(body: SocialLinkWriteBody) {
     const data = this.parseSocialCreate(body);
-    try {
-      const row = await this.prisma.socialLink.create({ data });
-      return mapSocialLink(row);
-    } catch (e) {
-      this.rethrowSocialConflict(e);
-    }
+    const row = await this.prisma.socialLink.create({ data });
+    return mapSocialLink(row);
   }
 
   async updateSocialLink(id: string, body: Partial<SocialLinkWriteBody>) {
     await this.requireSocial(id);
     const data = this.parseSocialUpdate(body);
-    try {
-      const row = await this.prisma.socialLink.update({ where: { id }, data });
-      return mapSocialLink(row);
-    } catch (e) {
-      this.rethrowSocialConflict(e);
-    }
+    const row = await this.prisma.socialLink.update({ where: { id }, data });
+    return mapSocialLink(row);
   }
 
   async deleteSocialLink(id: string) {
@@ -306,14 +296,9 @@ export class HomeService {
   private parseSocialCreate(
     body: SocialLinkWriteBody,
   ): Prisma.SocialLinkCreateInput {
-    const platform = assertPlatform(body.platform);
     return {
-      platform,
       url: assertHttpUrl(body.url, 'url'),
-      icon:
-        body.icon !== undefined
-          ? assertNonEmptyString(body.icon, 'icon')
-          : platform,
+      type: assertMediaType(body.type),
       sortOrder: assertOptionalInt(body.order, 'order') ?? 0,
       isActive: assertOptionalBool(body.active, 'active') ?? true,
     };
@@ -323,13 +308,8 @@ export class HomeService {
     body: Partial<SocialLinkWriteBody>,
   ): Prisma.SocialLinkUpdateInput {
     const data: Prisma.SocialLinkUpdateInput = {};
-    if (body.platform !== undefined) {
-      data.platform = assertPlatform(body.platform);
-    }
     if (body.url !== undefined) data.url = assertHttpUrl(body.url, 'url');
-    if (body.icon !== undefined) {
-      data.icon = assertNonEmptyString(body.icon, 'icon');
-    }
+    if (body.type !== undefined) data.type = assertMediaType(body.type);
     if (body.order !== undefined) {
       data.sortOrder = assertOptionalInt(body.order, 'order');
     }
@@ -340,17 +320,5 @@ export class HomeService {
       throw new BadRequestException('No fields to update');
     }
     return data;
-  }
-
-  private rethrowSocialConflict(e: unknown): never {
-    if (
-      e instanceof Prisma.PrismaClientKnownRequestError &&
-      e.code === 'P2002'
-    ) {
-      throw new ConflictException(
-        'A social link for this platform already exists',
-      );
-    }
-    throw e;
   }
 }

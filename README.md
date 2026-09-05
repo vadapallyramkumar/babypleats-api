@@ -40,7 +40,7 @@ Send `Authorization: Bearer <API_WRITE_KEY>` or `X-API-Key: <API_WRITE_KEY>`.
 | `POST` | `/v1/home/promotional-messages` | Create promo message |
 | `PATCH` | `/v1/home/promotional-messages/:id` | Update promo message |
 | `DELETE` | `/v1/home/promotional-messages/:id` | Delete promo message |
-| `POST` | `/v1/home/social-links` | Create social link (one per platform) |
+| `POST` | `/v1/home/social-links` | Create social link |
 | `PATCH` | `/v1/home/social-links/:id` | Update social link |
 | `DELETE` | `/v1/home/social-links/:id` | Delete social link |
 | `POST` | `/v1/media/upload` | Upload image (`multipart/form-data` field `file`) → Cloudinary |
@@ -52,7 +52,7 @@ Merchandising categories (`filter`): `budgetFriendly`, `readyToDispatch`, `bests
 
 Catalog deletes are soft. Home content deletes are hard (use `active: false` via PATCH to hide without deleting).
 
-Social platforms: `instagram`, `facebook`, `youtube`, `whatsapp`, `twitter`.
+Social link `type`: `image` or `video`.
 
 ### Home response shape
 
