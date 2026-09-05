@@ -22,11 +22,11 @@ export class MediaController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: memoryStorage(),
-      limits: { fileSize: 8 * 1024 * 1024 },
+      limits: { fileSize: 50 * 1024 * 1024 },
     }),
   )
-  async uploadImage(@UploadedFile() file: Express.Multer.File) {
-    const data = await this.media.uploadImage(file);
+  async upload(@UploadedFile() file: Express.Multer.File) {
+    const data = await this.media.upload(file);
 
     return {
       data,
@@ -35,8 +35,13 @@ export class MediaController {
 
   @Delete()
   @UseGuards(ApiKeyGuard)
-  async deleteImage(@Body() body: { publicId?: string }) {
-    const data = await this.media.deleteImage(body?.publicId ?? '');
+  async delete(
+    @Body() body: { publicId?: string; resourceType?: 'image' | 'video' },
+  ) {
+    const data = await this.media.delete(
+      body?.publicId ?? '',
+      body?.resourceType ?? 'image',
+    );
 
     return {
       data,

@@ -7,6 +7,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
 
+type MediaResourceType = 'image' | 'video';
+
 @Injectable()
 export class MediaService {
   constructor(private readonly config: ConfigService) {
@@ -55,15 +57,24 @@ export class MediaService {
     return { uploadPreset: uploadPreset! };
   }
 
-  async uploadImage(file: Express.Multer.File) {
+  private resolveResourceType(mimetype: string): MediaResourceType {
+    if (mimetype.startsWith('image/')) {
+      return 'image';
+    }
+
+    if (mimetype.startsWith('video/')) {
+      return 'video';
+    }
+
+    throw new BadRequestException('Only image and video files are supported');
+  }
+
+  async upload(file: Express.Multer.File) {
     if (!file?.buffer?.length) {
-      throw new BadRequestException('Image file is required');
+      throw new BadRequestException('Media file is required');
     }
 
-    if (!file.mimetype?.startsWith('image/')) {
-      throw new BadRequestException('Only image files are supported');
-    }
-
+    const resourceType = this.resolveResourceType(file.mimetype ?? '');
     const { uploadPreset } = this.assertCloudinaryReady(true);
 
     const folder =
@@ -73,7 +84,7 @@ export class MediaService {
     const result = await new Promise<UploadApiResponse>((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         {
-          resource_type: 'image',
+          resource_type: resourceType,
           upload_preset: uploadPreset,
           folder,
         },
@@ -108,20 +119,27 @@ export class MediaService {
       width: result.width,
       height: result.height,
       bytes: result.bytes,
+      duration: result.duration ?? undefined,
     };
   }
 
-  async deleteImage(publicId: string) {
+  async delete(
+    publicId: string,
+    resourceType: MediaResourceType | string = 'image',
+  ) {
     const id = publicId?.trim();
 
     if (!id) {
       throw new BadRequestException('publicId is required');
     }
 
+    const type: MediaResourceType =
+      resourceType === 'video' ? 'video' : 'image';
+
     this.assertCloudinaryReady(false);
 
     const result = await cloudinary.uploader
-      .destroy(id, { resource_type: 'image' })
+      .destroy(id, { resource_type: type })
       .catch((error: unknown) => {
         const message =
           error instanceof Error ? error.message : 'Cloudinary delete failed';
@@ -129,8 +147,27 @@ export class MediaService {
         throw new BadRequestException(message);
       });
 
+    if (result.result === 'not found' && type === 'image') {
+      const videoResult = await cloudinary.uploader
+        .destroy(id, { resource_type: 'video' })
+        .catch((error: unknown) => {
+          const message =
+            error instanceof Error ? error.message : 'Cloudinary delete failed';
+
+          throw new BadRequestException(message);
+        });
+
+      if (videoResult.result === 'ok') {
+        return {
+          publicId: id,
+          deleted: true,
+          resourceType: 'video' as const,
+        };
+      }
+    }
+
     if (result.result === 'not found') {
-      throw new NotFoundException(`Image not found: ${id}`);
+      throw new NotFoundException(`Media not found: ${id}`);
     }
 
     if (result.result !== 'ok') {
@@ -142,6 +179,8 @@ export class MediaService {
     return {
       publicId: id,
       deleted: true,
+      resourceType: type,
     };
   }
+
 }

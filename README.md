@@ -43,8 +43,8 @@ Send `Authorization: Bearer <API_WRITE_KEY>` or `X-API-Key: <API_WRITE_KEY>`.
 | `POST` | `/v1/home/social-links` | Create social link |
 | `PATCH` | `/v1/home/social-links/:id` | Update social link |
 | `DELETE` | `/v1/home/social-links/:id` | Delete social link |
-| `POST` | `/v1/media/upload` | Upload image (`multipart/form-data` field `file`) → Cloudinary |
-| `DELETE` | `/v1/media` | Delete image (`{ "publicId": "..." }` from upload response) |
+| `POST` | `/v1/media/upload` | Upload image or video (`multipart/form-data` field `file`, max 50MB) → Cloudinary |
+| `DELETE` | `/v1/media` | Delete media (`{ "publicId": "...", "resourceType": "image"|"video" }` — `resourceType` optional, defaults to `image`) |
 
 Product query params: `category`, `featured`, `isNew`, `tag`, `q`, `page`, `limit`.
 
