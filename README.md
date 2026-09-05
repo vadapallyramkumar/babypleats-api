@@ -22,9 +22,19 @@ API base: [http://localhost:4000/v1](http://localhost:4000/v1)
 | `GET` | `/v1/home/social-links` | Social media links |
 | `GET` | `/v1/home/social-links/:id` | Social link by id |
 
-### Writes (API key required)
+### Auth
 
-Send `Authorization: Bearer <API_WRITE_KEY>` or `X-API-Key: <API_WRITE_KEY>`.
+| Method | Path | Purpose |
+|---|---|---|
+| `POST` | `/v1/auth/login` | `{ "email", "password" }` → `{ data: { accessToken, expiresIn, user } }` |
+| `GET` | `/v1/auth/me` | Current admin (`Authorization: Bearer <accessToken>`) |
+| `POST` | `/v1/auth/logout` | Client logout (`204`; JWT is stateless) |
+
+Owner account is upserted on boot from `ADMIN_EMAIL` / `ADMIN_PASSWORD` / optional `ADMIN_NAME`.
+
+### Writes (JWT or API key)
+
+Send `Authorization: Bearer <accessToken>` (admin login) **or** `Authorization: Bearer <API_WRITE_KEY>` / `X-API-Key: <API_WRITE_KEY>` (scripts).
 
 | Method | Path | Purpose |
 |---|---|---|
@@ -75,7 +85,7 @@ npm run prisma:seed
 npm run start:dev
 ```
 
-Set a strong `API_WRITE_KEY` before using write endpoints.
+Set `JWT_SECRET`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` before starting. Optionally set `API_WRITE_KEY` for script access to write endpoints.
 
 ## Docker
 
@@ -86,9 +96,9 @@ docker compose up --build
 ## Deploy (Railway / Render)
 
 1. PostgreSQL + `DATABASE_URL`
-2. `PORT`, `CORS_ORIGIN`, `API_WRITE_KEY`
+2. `PORT`, `CORS_ORIGIN`, `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` (optional `ADMIN_NAME`, `JWT_EXPIRES_IN`, `API_WRITE_KEY`)
 3. Cloudinary: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `CLOUDINARY_UPLOAD_PRESET` (optional `CLOUDINARY_FOLDER`)
 4. Health check: `/health`
-5. Deploy; image runs `prisma migrate deploy` then `node dist/main.js` (does **not** seed)
-6. Seed once manually when needed: `npm run prisma:seed`
+5. Deploy; image runs `prisma migrate deploy` then `node dist/main.js` (does **not** seed catalog; admin owner is upserted on boot from env)
+6. Seed catalog once manually when needed: `npm run prisma:seed`
 7. Storefront: `NEXT_PUBLIC_API_BASE_URL=https://api.babypleats.com/v1`

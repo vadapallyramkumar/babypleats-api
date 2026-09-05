@@ -6,6 +6,29 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
+export function extractBearerToken(req: Request): string | undefined {
+  const header = req.headers.authorization;
+  if (header?.startsWith('Bearer ')) {
+    return header.slice(7).trim() || undefined;
+  }
+  return undefined;
+}
+
+export function extractApiKey(req: Request): string | undefined {
+  const bearer = extractBearerToken(req);
+  const apiKeyHeader = req.headers['x-api-key'];
+  const fromHeader = Array.isArray(apiKeyHeader)
+    ? apiKeyHeader[0]
+    : apiKeyHeader;
+  return (fromHeader || bearer || '').trim() || undefined;
+}
+
+export function isValidApiKey(provided: string | undefined): boolean {
+  const expected = process.env.API_WRITE_KEY?.trim();
+  if (!expected || !provided) return false;
+  return provided === expected;
+}
+
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
@@ -17,17 +40,9 @@ export class ApiKeyGuard implements CanActivate {
     }
 
     const req = context.switchToHttp().getRequest<Request>();
-    const header = req.headers.authorization;
-    const bearer = header?.startsWith('Bearer ')
-      ? header.slice(7).trim()
-      : undefined;
-    const apiKeyHeader = req.headers['x-api-key'];
-    const fromHeader = Array.isArray(apiKeyHeader)
-      ? apiKeyHeader[0]
-      : apiKeyHeader;
-    const provided = (bearer || fromHeader || '').trim();
+    const provided = extractApiKey(req);
 
-    if (!provided || provided !== expected) {
+    if (!isValidApiKey(provided)) {
       throw new UnauthorizedException('Missing or invalid API key');
     }
     return true;
