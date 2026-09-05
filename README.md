@@ -30,7 +30,7 @@ Send `Authorization: Bearer <API_WRITE_KEY>` or `X-API-Key: <API_WRITE_KEY>`.
 |---|---|---|
 | `POST` | `/v1/categories` | Create category |
 | `PUT` / `PATCH` | `/v1/categories/:id` | Update category |
-| `DELETE` | `/v1/categories/:id` | Soft-delete category (`isActive: false`) |
+| `DELETE` | `/v1/categories/:id` | Permanently delete category (fails if any products still reference it) |
 | `POST` | `/v1/products` | Create product |
 | `PUT` / `PATCH` | `/v1/products/:id` | Update product |
 | `DELETE` | `/v1/products/:id` | Permanently delete product |
@@ -50,7 +50,7 @@ Product query params: `category`, `featured`, `isNew`, `tag`, `q`, `page`, `limi
 
 Merchandising categories (`filter`): `budgetFriendly`, `readyToDispatch`, `bestseller`.
 
-Catalog deletes are soft. Home content deletes are hard (use `active: false` via PATCH to hide without deleting).
+To hide a category or product without deleting, set `isActive: false` via PATCH. `DELETE` permanently removes the record. Home content is the same (use `active: false` via PATCH to hide).
 
 Social link `type`: `image` or `video`.
 

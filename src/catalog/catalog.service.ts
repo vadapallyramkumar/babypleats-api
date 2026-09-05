@@ -224,18 +224,15 @@ export class CatalogService {
     if (!existing) throw new NotFoundException('Category not found');
 
     const productCount = await this.prisma.product.count({
-      where: { categoryId: id, isActive: true },
+      where: { categoryId: id },
     });
     if (productCount > 0) {
       throw new ConflictException(
-        'Category has active products; deactivate or reassign them first',
+        'Category has products; reassign or delete them first',
       );
     }
 
-    await this.prisma.category.update({
-      where: { id },
-      data: { isActive: false },
-    });
+    await this.prisma.category.delete({ where: { id } });
   }
 
   async createProduct(body: ProductWriteBody) {
