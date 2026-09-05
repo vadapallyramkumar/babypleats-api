@@ -42,27 +42,31 @@ export class AuthService implements OnModuleInit {
 
   async ensureSeedAdmin(): Promise<void> {
     const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-    const password = process.env.ADMIN_PASSWORD;
     const name =
       process.env.ADMIN_NAME?.trim() || DEFAULT_ADMIN_NAME;
 
-    if (!email || !password) {
+    if (!email) {
+      throw new Error('ADMIN_EMAIL must be set to seed the owner account');
+    }
+
+    const existing = await this.prisma.adminUser.findUnique({
+      where: { email },
+    });
+    if (existing) {
+      return;
+    }
+
+    const password = process.env.ADMIN_PASSWORD;
+    if (!password) {
       throw new Error(
-        'ADMIN_EMAIL and ADMIN_PASSWORD must be set to seed the owner account',
+        'ADMIN_PASSWORD must be set to create the owner account on first boot',
       );
     }
 
     const passwordHash = await bcrypt.hash(password, BCRYPT_ROUNDS);
-
-    await this.prisma.adminUser.upsert({
-      where: { email },
-      create: {
+    await this.prisma.adminUser.create({
+      data: {
         email,
-        name,
-        role: 'owner',
-        passwordHash,
-      },
-      update: {
         name,
         role: 'owner',
         passwordHash,

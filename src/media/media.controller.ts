@@ -10,7 +10,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 
-import { JwtOrApiKeyGuard } from '../auth/jwt-or-api-key.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { MediaService } from './media.service';
 
 @Controller('media')
@@ -18,7 +18,7 @@ export class MediaController {
   constructor(private readonly media: MediaService) {}
 
   @Post('upload')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileInterceptor('file', {
       storage: memoryStorage(),
@@ -34,7 +34,7 @@ export class MediaController {
   }
 
   @Delete()
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   async delete(
     @Body() body: { publicId?: string; resourceType?: 'image' | 'video' },
   ) {

@@ -11,7 +11,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { JwtOrApiKeyGuard } from '../auth/jwt-or-api-key.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CatalogService } from './catalog.service';
 import type { CategoryWriteBody, ProductWriteBody } from './catalog.service';
 
@@ -37,7 +37,7 @@ export class CatalogController {
   }
 
   @Post('categories')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   @HttpCode(201)
   async createCategory(@Body() body: CategoryWriteBody) {
     const data = await this.catalog.createCategory(body);
@@ -45,7 +45,7 @@ export class CatalogController {
   }
 
   @Patch('categories/:id')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   async patchCategory(
     @Param('id') id: string,
     @Body() body: Partial<CategoryWriteBody>,
@@ -55,7 +55,7 @@ export class CatalogController {
   }
 
   @Put('categories/:id')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   async putCategory(
     @Param('id') id: string,
     @Body() body: Partial<CategoryWriteBody>,
@@ -65,7 +65,7 @@ export class CatalogController {
   }
 
   @Delete('categories/:id')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   @HttpCode(204)
   async deleteCategory(@Param('id') id: string) {
     await this.catalog.deleteCategory(id);
@@ -97,7 +97,7 @@ export class CatalogController {
   }
 
   @Post('products')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   @HttpCode(201)
   async createProduct(@Body() body: ProductWriteBody) {
     const data = await this.catalog.createProduct(body);
@@ -117,7 +117,7 @@ export class CatalogController {
   }
 
   @Patch('products/:id')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   async patchProduct(
     @Param('id') id: string,
     @Body() body: Partial<ProductWriteBody>,
@@ -127,7 +127,7 @@ export class CatalogController {
   }
 
   @Put('products/:id')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   async putProduct(
     @Param('id') id: string,
     @Body() body: Partial<ProductWriteBody>,
@@ -137,7 +137,7 @@ export class CatalogController {
   }
 
   @Delete('products/:id')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   @HttpCode(204)
   async deleteProduct(@Param('id') id: string) {
     await this.catalog.deleteProduct(id);

@@ -8,9 +8,16 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 import type { AdminUserPublic, JwtPayload } from './auth.types';
-import { extractBearerToken } from './api-key.guard';
 
 export type AuthedRequest = Request & { user?: AdminUserPublic };
+
+export function extractBearerToken(req: Request): string | undefined {
+  const header = req.headers.authorization;
+  if (header?.startsWith('Bearer ')) {
+    return header.slice(7).trim() || undefined;
+  }
+  return undefined;
+}
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {

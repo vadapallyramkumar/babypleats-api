@@ -7,6 +7,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard, type AuthedRequest } from './jwt-auth.guard';
@@ -17,6 +18,8 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(200)
+  @UseGuards(ThrottlerGuard)
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   async login(@Body() body: LoginDto) {
     const data = await this.auth.login(body.email, body.password);
     return { data };

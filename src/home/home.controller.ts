@@ -10,7 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { JwtOrApiKeyGuard } from '../auth/jwt-or-api-key.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { HomeService } from './home.service';
 import type {
   HeroImageWriteBody,
@@ -50,7 +50,7 @@ export class HomeController {
   }
 
   @Post('hero-images')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   @HttpCode(201)
   async createHeroImage(@Body() body: HeroImageWriteBody) {
     const data = await this.home.createHeroImage(body);
@@ -58,7 +58,7 @@ export class HomeController {
   }
 
   @Patch('hero-images/:id')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   async patchHeroImage(
     @Param('id') id: string,
     @Body() body: Partial<HeroImageWriteBody>,
@@ -68,7 +68,7 @@ export class HomeController {
   }
 
   @Delete('hero-images/:id')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   @HttpCode(204)
   async deleteHeroImage(@Param('id') id: string) {
     await this.home.deleteHeroImage(id);
@@ -93,7 +93,7 @@ export class HomeController {
   }
 
   @Post('promotional-messages')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   @HttpCode(201)
   async createPromotionalMessage(@Body() body: PromotionalMessageWriteBody) {
     const data = await this.home.createPromotionalMessage(body);
@@ -101,7 +101,7 @@ export class HomeController {
   }
 
   @Patch('promotional-messages/:id')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   async patchPromotionalMessage(
     @Param('id') id: string,
     @Body() body: Partial<PromotionalMessageWriteBody>,
@@ -111,7 +111,7 @@ export class HomeController {
   }
 
   @Delete('promotional-messages/:id')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   @HttpCode(204)
   async deletePromotionalMessage(@Param('id') id: string) {
     await this.home.deletePromotionalMessage(id);
@@ -134,7 +134,7 @@ export class HomeController {
   }
 
   @Post('social-links')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   @HttpCode(201)
   async createSocialLink(@Body() body: SocialLinkWriteBody) {
     const data = await this.home.createSocialLink(body);
@@ -142,7 +142,7 @@ export class HomeController {
   }
 
   @Patch('social-links/:id')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   async patchSocialLink(
     @Param('id') id: string,
     @Body() body: Partial<SocialLinkWriteBody>,
@@ -152,7 +152,7 @@ export class HomeController {
   }
 
   @Delete('social-links/:id')
-  @UseGuards(JwtOrApiKeyGuard)
+  @UseGuards(JwtAuthGuard)
   @HttpCode(204)
   async deleteSocialLink(@Param('id') id: string) {
     await this.home.deleteSocialLink(id);

@@ -3,7 +3,6 @@ import { JwtModule, type JwtModuleOptions } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { JwtOrApiKeyGuard } from './jwt-or-api-key.guard';
 
 function requireJwtSecret(): string {
   const secret = process.env.JWT_SECRET?.trim();
@@ -25,7 +24,7 @@ function requireJwtSecret(): string {
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtAuthGuard, JwtOrApiKeyGuard],
-  exports: [AuthService, JwtModule, JwtAuthGuard, JwtOrApiKeyGuard],
+  providers: [AuthService, JwtAuthGuard],
+  exports: [AuthService, JwtModule, JwtAuthGuard],
 })
 export class AuthModule {}

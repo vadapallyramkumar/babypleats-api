@@ -30,11 +30,11 @@ API base: [http://localhost:4000/v1](http://localhost:4000/v1)
 | `GET` | `/v1/auth/me` | Current admin (`Authorization: Bearer <accessToken>`) |
 | `POST` | `/v1/auth/logout` | Client logout (`204`; JWT is stateless) |
 
-Owner account is upserted on boot from `ADMIN_EMAIL` / `ADMIN_PASSWORD` / optional `ADMIN_NAME`.
+Owner account is created on boot from `ADMIN_EMAIL` / `ADMIN_PASSWORD` / optional `ADMIN_NAME` only if that email does not already exist (password is never overwritten on later startups). Login is rate-limited to 5 attempts per IP per minute.
 
-### Writes (JWT or API key)
+### Writes (JWT)
 
-Send `Authorization: Bearer <accessToken>` (admin login) **or** `Authorization: Bearer <API_WRITE_KEY>` / `X-API-Key: <API_WRITE_KEY>` (scripts).
+Send `Authorization: Bearer <accessToken>` from admin login.
 
 | Method | Path | Purpose |
 |---|---|---|
@@ -85,7 +85,7 @@ npm run prisma:seed
 npm run start:dev
 ```
 
-Set `JWT_SECRET`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` before starting. Optionally set `API_WRITE_KEY` for script access to write endpoints.
+Set `JWT_SECRET`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` before starting.
 
 ## Docker
 
@@ -96,9 +96,9 @@ docker compose up --build
 ## Deploy (Railway / Render)
 
 1. PostgreSQL + `DATABASE_URL`
-2. `PORT`, `CORS_ORIGIN`, `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` (optional `ADMIN_NAME`, `JWT_EXPIRES_IN`, `API_WRITE_KEY`)
+2. `PORT`, `CORS_ORIGIN`, `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` (optional `ADMIN_NAME`, `JWT_EXPIRES_IN`)
 3. Cloudinary: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `CLOUDINARY_UPLOAD_PRESET` (optional `CLOUDINARY_FOLDER`)
 4. Health check: `/health`
-5. Deploy; image runs `prisma migrate deploy` then `node dist/main.js` (does **not** seed catalog; admin owner is upserted on boot from env)
+5. Deploy; image runs `prisma migrate deploy` then `node dist/main.js` (does **not** seed catalog; admin owner is created on first boot from env if missing)
 6. Seed catalog once manually when needed: `npm run prisma:seed`
 7. Storefront: `NEXT_PUBLIC_API_BASE_URL=https://api.babypleats.com/v1`
