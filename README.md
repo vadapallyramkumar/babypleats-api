@@ -12,9 +12,9 @@ API base: [http://localhost:4000/v1](http://localhost:4000/v1)
 |---|---|---|
 | `GET` | `/health` | Liveness (no `/v1` prefix) |
 | `GET` | `/v1` | API info |
-| `GET` | `/v1/categories` | Active categories |
-| `GET` | `/v1/products` | Active products (paginated) |
-| `GET` | `/v1/products/:slug` | Product detail |
+| `GET` | `/v1/categories` | Categories (active only; `?includeInactive=true` for all) |
+| `GET` | `/v1/products` | Products paginated (active only; `?includeInactive=true` for all) |
+| `GET` | `/v1/products/:slug` | Product detail (active only; `?includeInactive=true` allows inactive) |
 
 ### Writes (API key required)
 

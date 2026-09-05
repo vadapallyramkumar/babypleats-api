@@ -27,8 +27,12 @@ export class CatalogController {
   constructor(private readonly catalog: CatalogService) {}
 
   @Get('categories')
-  async listCategories() {
-    const data = await this.catalog.listCategories();
+  async listCategories(
+    @Query('includeInactive') includeInactive?: string,
+  ) {
+    const data = await this.catalog.listCategories({
+      includeInactive: parseBool(includeInactive) === true,
+    });
     return { data };
   }
 
@@ -76,16 +80,20 @@ export class CatalogController {
     @Query('q') q?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
+    @Query('includeInactive') includeInactive?: string,
   ) {
-    return this.catalog.listProducts({
-      category,
-      featured: parseBool(featured),
-      isNew: parseBool(isNew),
-      tag,
-      q,
-      page: page ? Number(page) : undefined,
-      limit: limit ? Number(limit) : undefined,
-    });
+    return this.catalog.listProducts(
+      {
+        category,
+        featured: parseBool(featured),
+        isNew: parseBool(isNew),
+        tag,
+        q,
+        page: page ? Number(page) : undefined,
+        limit: limit ? Number(limit) : undefined,
+      },
+      { includeInactive: parseBool(includeInactive) === true },
+    );
   }
 
   @Post('products')
@@ -97,8 +105,14 @@ export class CatalogController {
   }
 
   @Get('products/:slug')
-  async getProduct(@Param('slug') slug: string) {
-    const data = await this.catalog.getProductBySlug(slug);
+  async getProduct(
+    @Param('slug') slug: string,
+    @Query('includeInactive') includeInactive?: string,
+  ) {
+    const data = await this.catalog.getProductBySlug(
+      slug,
+      parseBool(includeInactive) === true,
+    );
     return { data };
   }
 

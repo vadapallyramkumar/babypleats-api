@@ -53,9 +53,9 @@ export type ProductWriteBody = {
 export class CatalogService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async listCategories(activeOnly = true) {
+  async listCategories(opts: { includeInactive?: boolean } = {}) {
     const rows = await this.prisma.category.findMany({
-      where: activeOnly ? { isActive: true } : undefined,
+      where: opts.includeInactive ? undefined : { isActive: true },
       orderBy: { sortOrder: 'asc' },
     });
     return rows.map(mapCategory);
@@ -136,12 +136,12 @@ export class CatalogService {
     };
   }
 
-  async getProductBySlug(slug: string) {
+  async getProductBySlug(slug: string, includeInactive = false) {
     const row = await this.prisma.product.findUnique({ where: { slug } });
-    if (!row || !row.isActive) {
+    if (!row || (!includeInactive && !row.isActive)) {
       throw new NotFoundException('Product not found');
     }
-    return mapProduct(row);
+    return mapProduct(row, includeInactive);
   }
 
   async getProductById(id: string) {
