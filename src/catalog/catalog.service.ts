@@ -327,10 +327,7 @@ export class CatalogService {
 
   async deleteProduct(id: string) {
     try {
-      await this.prisma.product.update({
-        where: { id },
-        data: { isActive: false },
-      });
+      await this.prisma.product.delete({ where: { id } });
     } catch (e) {
       if (
         e instanceof Prisma.PrismaClientKnownRequestError &&

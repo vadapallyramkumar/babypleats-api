@@ -33,7 +33,7 @@ Send `Authorization: Bearer <API_WRITE_KEY>` or `X-API-Key: <API_WRITE_KEY>`.
 | `DELETE` | `/v1/categories/:id` | Soft-delete category (`isActive: false`) |
 | `POST` | `/v1/products` | Create product |
 | `PUT` / `PATCH` | `/v1/products/:id` | Update product |
-| `DELETE` | `/v1/products/:id` | Soft-delete product (`isActive: false`) |
+| `DELETE` | `/v1/products/:id` | Permanently delete product |
 | `POST` | `/v1/home/hero-images` | Create hero image |
 | `PATCH` | `/v1/home/hero-images/:id` | Update hero image |
 | `DELETE` | `/v1/home/hero-images/:id` | Delete hero image |
