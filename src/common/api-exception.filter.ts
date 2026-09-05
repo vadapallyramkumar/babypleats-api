@@ -38,6 +38,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
       };
 
       return res.status(status).json({
+        success: false,
         error: {
           code: codeMap[status] ?? 'INTERNAL_ERROR',
           message: Array.isArray(message) ? message.join('; ') : message,
@@ -48,6 +49,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
 
     console.error(exception);
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      success: false,
       error: {
         code: 'INTERNAL_ERROR',
         message: 'Unexpected server fault',
