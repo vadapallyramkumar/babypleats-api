@@ -45,13 +45,13 @@ Send `Authorization: Bearer <accessToken>` from admin login.
 | `PUT` / `PATCH` | `/v1/products/:id` | Update product |
 | `DELETE` | `/v1/products/:id` | Permanently delete product |
 | `POST` | `/v1/home/hero-images` | Create hero image |
-| `PATCH` | `/v1/home/hero-images/:id` | Update hero image |
+| `PUT` / `PATCH` | `/v1/home/hero-images/:id` | Update hero image |
 | `DELETE` | `/v1/home/hero-images/:id` | Delete hero image |
 | `POST` | `/v1/home/promotional-messages` | Create promo message |
-| `PATCH` | `/v1/home/promotional-messages/:id` | Update promo message |
+| `PUT` / `PATCH` | `/v1/home/promotional-messages/:id` | Update promo message |
 | `DELETE` | `/v1/home/promotional-messages/:id` | Delete promo message |
 | `POST` | `/v1/home/social-links` | Create social link |
-| `PATCH` | `/v1/home/social-links/:id` | Update social link |
+| `PUT` / `PATCH` | `/v1/home/social-links/:id` | Update social link |
 | `DELETE` | `/v1/home/social-links/:id` | Delete social link |
 | `POST` | `/v1/media/upload` | Upload image or video (`multipart/form-data` field `file`) → Cloudinary. Allowed: jpeg/png/webp/gif (≤10MB), mp4/webm/mov (≤50MB). Content is checked via magic bytes. |
 | `DELETE` | `/v1/media` | Delete media (`{ "publicId": "...", "resourceType": "image"|"video" }` — `resourceType` optional, defaults to `image`) |

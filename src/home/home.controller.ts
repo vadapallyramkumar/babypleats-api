@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -70,6 +71,16 @@ export class HomeController {
     return ok(data, 'Hero image updated successfully');
   }
 
+  @Put('hero-images/:id')
+  @UseGuards(JwtAuthGuard)
+  async putHeroImage(
+    @Param('id') id: string,
+    @Body() body: UpdateHeroImageDto,
+  ) {
+    const data = await this.home.updateHeroImage(id, body);
+    return ok(data, 'Hero image updated successfully');
+  }
+
   @Delete('hero-images/:id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(204)
@@ -113,6 +124,16 @@ export class HomeController {
     return ok(data, 'Promotional message updated successfully');
   }
 
+  @Put('promotional-messages/:id')
+  @UseGuards(JwtAuthGuard)
+  async putPromotionalMessage(
+    @Param('id') id: string,
+    @Body() body: UpdatePromotionalMessageDto,
+  ) {
+    const data = await this.home.updatePromotionalMessage(id, body);
+    return ok(data, 'Promotional message updated successfully');
+  }
+
   @Delete('promotional-messages/:id')
   @UseGuards(JwtAuthGuard)
   @HttpCode(204)
@@ -147,6 +168,16 @@ export class HomeController {
   @Patch('social-links/:id')
   @UseGuards(JwtAuthGuard)
   async patchSocialLink(
+    @Param('id') id: string,
+    @Body() body: UpdateSocialLinkDto,
+  ) {
+    const data = await this.home.updateSocialLink(id, body);
+    return ok(data, 'Social link updated successfully');
+  }
+
+  @Put('social-links/:id')
+  @UseGuards(JwtAuthGuard)
+  async putSocialLink(
     @Param('id') id: string,
     @Body() body: UpdateSocialLinkDto,
   ) {
