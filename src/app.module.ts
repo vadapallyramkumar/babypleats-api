@@ -7,6 +7,7 @@ import { HealthController } from './health/health.controller';
 import { HomeModule } from './home/home.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { MediaModule } from './media/media.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { MediaModule } from './media/media.module';
     CatalogModule,
     HomeModule,
     MediaModule,
+    OrdersModule,
   ],
   controllers: [HealthController],
 })

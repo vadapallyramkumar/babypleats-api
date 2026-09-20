@@ -89,3 +89,72 @@ model AdminUser {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
+
+enum OrderStatus {
+  pending_payment
+  new
+  confirmed
+  shipped
+  delivered
+  cancelled
+}
+
+enum PaymentMethod {
+  cod
+  razorpay
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  failed
+}
+
+model Order {
+  id                String        @id
+  seq               Int           @unique
+  status            OrderStatus
+  source            String        @default("website")
+  customerName      String
+  customerEmail     String
+  customerPhone     String
+  address           String
+  city              String
+  state             String
+  pincode           String
+  notes             String?
+  paymentMethod     PaymentMethod
+  paymentStatus     PaymentStatus @default(pending)
+  razorpayOrderId   String?       @unique
+  razorpayPaymentId String?
+  subtotal          Float
+  shipping          Float
+  total             Float
+  currency          String        @default("INR")
+  stockApplied      Boolean       @default(false)
+  items             OrderItem[]
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([paymentMethod, paymentStatus])
+  @@index([customerPhone])
+}
+
+model OrderItem {
+  id          String  @id @default(uuid())
+  orderId     String
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String
+  variantId   String
+  productName String
+  sku         String?
+  size        String?
+  color       String?
+  qty         Int
+  unitPrice   Float
+
+  @@index([orderId])
+  @@index([productId])
+}

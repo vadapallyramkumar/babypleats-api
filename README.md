@@ -1,6 +1,6 @@
 # Baby Pleats API
 
-Catalog + home CMS API (NestJS + Prisma + PostgreSQL) for **products, categories, and homepage content**.
+Catalog, home CMS, checkout, and admin orders API (NestJS + Prisma + PostgreSQL).
 
 ## Endpoints
 
@@ -21,6 +21,8 @@ API base: [http://localhost:4000/v1](http://localhost:4000/v1)
 | `GET` | `/v1/home/promotional-messages/:id` | Promo message by id |
 | `GET` | `/v1/home/social-links` | Social media links |
 | `GET` | `/v1/home/social-links/:id` | Social link by id |
+| `POST` | `/v1/checkout` | Place website order (COD or start Razorpay). Also aliased as `POST /v1/orders`. Rate-limited. |
+| `POST` | `/v1/checkout/verify` | Confirm Razorpay payment. Aliases: `POST /v1/payments/verify`, `POST /v1/orders/:id/payments/verify`. |
 
 ### Auth
 
@@ -55,6 +57,10 @@ Send `Authorization: Bearer <accessToken>` from admin login.
 | `DELETE` | `/v1/home/social-links/:id` | Delete social link |
 | `POST` | `/v1/media/upload` | Upload image or video (`multipart/form-data` field `file`) → Cloudinary. Allowed: jpeg/png/webp/gif (≤10MB), mp4/webm/mov (≤50MB). Content is checked via magic bytes. |
 | `DELETE` | `/v1/media` | Delete media (`{ "publicId": "...", "resourceType": "image"|"video" }` — `resourceType` optional, defaults to `image`) |
+| `GET` | `/v1/orders` | List orders (`status`, `paymentMethod`, `from`, `to`, `q`, `page`, `limit`) |
+| `GET` | `/v1/orders/:id` | Order detail |
+| `PATCH` | `/v1/orders/:id` | Update `status` and/or `notes` |
+| `GET` | `/v1/dashboard/sales` | Sales overview (`?range=today\|7d\|30d`, default `30d`) |
 
 Product query params: `category`, `featured`, `isNew`, `tag`, `q`, `page`, `limit`.
 
@@ -63,6 +69,10 @@ Merchandising categories (`filter`): `budgetFriendly`, `readyToDispatch`, `bests
 To hide a category or product without deleting, set `isActive: false` via PATCH. `DELETE` permanently removes the record. Home content is the same (use `active: false` via PATCH to hide).
 
 Social link `type`: `image` or `video`.
+
+Checkout recomputes prices and shipping on the server (default free shipping at ₹999, fee ₹99). COD orders start as `new`; Razorpay orders start as `pending_payment` until verify. Status flow: `pending_payment` → `new` → `confirmed` → `shipped` → `delivered`, or `cancelled`.
+
+Online pay needs `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET`. Checkout is rate-limited to 10 requests per IP per minute.
 
 ### Home response shape
 
@@ -98,7 +108,8 @@ docker compose up --build
 1. PostgreSQL + `DATABASE_URL`
 2. `PORT`, `CORS_ORIGIN`, `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` (optional `ADMIN_NAME`, `JWT_EXPIRES_IN`, `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE`)
 3. Cloudinary: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `CLOUDINARY_UPLOAD_PRESET` (optional `CLOUDINARY_FOLDER`)
-4. Health check: `/health`
-5. Deploy; image runs `prisma migrate deploy` then `node dist/main.js` (does **not** seed catalog; admin owner is created on first boot from env if missing)
-6. Seed catalog once manually when needed: `npm run prisma:seed`
-7. Storefront: `NEXT_PUBLIC_API_BASE_URL=https://api.babypleats.com/v1`
+4. Razorpay (Pay online): `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET` (optional `FREE_SHIPPING_THRESHOLD`, `SHIPPING_FEE`)
+5. Health check: `/health`
+6. Deploy; image runs `prisma migrate deploy` then `node dist/main.js` (does **not** seed catalog; admin owner is created on first boot from env if missing)
+7. Seed catalog once manually when needed: `npm run prisma:seed`
+8. Storefront: `NEXT_PUBLIC_API_BASE_URL=https://api.babypleats.com/v1`

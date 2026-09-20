@@ -7,7 +7,7 @@ export class HealthController {
     return {
       data: {
         name: 'Baby Pleats API',
-        version: '1.2.0',
+        version: '1.3.0',
         endpoints: {
           health: 'GET /health',
           categories: 'GET /v1/categories',
@@ -26,6 +26,11 @@ export class HealthController {
             'GET|PATCH|DELETE /v1/home/promotional-messages/:id',
           socialLinks: 'GET|POST /v1/home/social-links',
           socialLinkById: 'GET|PATCH|DELETE /v1/home/social-links/:id',
+          checkout: 'POST /v1/checkout',
+          checkoutVerify: 'POST /v1/checkout/verify',
+          orders: 'GET /v1/orders',
+          orderById: 'GET|PATCH /v1/orders/:id',
+          dashboardSales: 'GET /v1/dashboard/sales',
         },
       },
     };
