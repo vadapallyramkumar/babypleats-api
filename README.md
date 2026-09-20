@@ -23,6 +23,7 @@ API base: [http://localhost:4000/v1](http://localhost:4000/v1)
 | `GET` | `/v1/home/social-links/:id` | Social link by id |
 | `POST` | `/v1/checkout` | Place website order (COD or start Razorpay). Also aliased as `POST /v1/orders`. Rate-limited. |
 | `POST` | `/v1/checkout/verify` | Confirm Razorpay payment. Aliases: `POST /v1/payments/verify`, `POST /v1/orders/:id/payments/verify`. |
+| `POST` | `/v1/coupons/validate` | Preview a coupon against cart items (`{ code, items, phone? }`). Rate-limited. |
 
 ### Auth
 
@@ -61,6 +62,11 @@ Send `Authorization: Bearer <accessToken>` from admin login.
 | `GET` | `/v1/orders/:id` | Order detail |
 | `PATCH` | `/v1/orders/:id` | Update `status` and/or `notes` |
 | `GET` | `/v1/dashboard/sales` | Sales overview (`?range=today\|7d\|30d`, default `30d`) |
+| `GET` | `/v1/coupons` | List coupons |
+| `POST` | `/v1/coupons` | Create coupon |
+| `GET` | `/v1/coupons/:id` | Coupon detail |
+| `PATCH` | `/v1/coupons/:id` | Update coupon |
+| `DELETE` | `/v1/coupons/:id` | Delete unused coupon (409 if any order used it) |
 
 Product query params: `category`, `featured`, `isNew`, `tag`, `q`, `page`, `limit`.
 
@@ -70,7 +76,7 @@ To hide a category or product without deleting, set `isActive: false` via PATCH.
 
 Social link `type`: `image` or `video`.
 
-Checkout recomputes prices and shipping on the server (default free shipping at ₹999, fee ₹99). COD orders start as `new`; Razorpay orders start as `pending_payment` until verify. Status flow: `pending_payment` → `new` → `confirmed` → `shipped` → `delivered`, or `cancelled`.
+Checkout recomputes prices and shipping on the server (default free shipping at ₹999, fee ₹99). Optional `couponCode` is percent or fixed amount off the pre-discount subtotal; shipping still uses that subtotal. COD orders start as `new`; Razorpay orders start as `pending_payment` until verify. Status flow: `pending_payment` → `new` → `confirmed` → `shipped` → `delivered`, or `cancelled`.
 
 Online pay needs `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET`. Checkout is rate-limited to 10 requests per IP per minute.
 

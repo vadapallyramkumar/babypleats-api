@@ -131,8 +131,13 @@ model Order {
   shipping          Float
   total             Float
   currency          String        @default("INR")
+  discount          Float         @default(0)
+  couponCode        String?
+  couponId          String?
+  coupon            Coupon?       @relation(fields: [couponId], references: [id], onDelete: SetNull)
   stockApplied      Boolean       @default(false)
   items             OrderItem[]
+  redemption        CouponRedemption?
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
 
@@ -140,6 +145,7 @@ model Order {
   @@index([createdAt])
   @@index([paymentMethod, paymentStatus])
   @@index([customerPhone])
+  @@index([couponId])
 }
 
 model OrderItem {
@@ -157,4 +163,40 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
+}
+
+enum CouponType {
+  percent
+  fixed
+}
+
+model Coupon {
+  id              String              @id @default(uuid())
+  code            String              @unique
+  type            CouponType
+  value           Float
+  minSubtotal     Float?
+  maxDiscount     Float?
+  startsAt        DateTime?
+  endsAt          DateTime?
+  maxRedemptions  Int?
+  maxPerCustomer  Int?
+  isActive        Boolean             @default(true)
+  redemptionCount Int                 @default(0)
+  orders          Order[]
+  redemptions     CouponRedemption[]
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+}
+
+model CouponRedemption {
+  id        String   @id @default(uuid())
+  couponId  String
+  coupon    Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  orderId   String   @unique
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  phone     String
+  createdAt DateTime @default(now())
+
+  @@index([couponId, phone])
 }

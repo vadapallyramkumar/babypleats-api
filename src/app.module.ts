@@ -8,6 +8,7 @@ import { HomeModule } from './home/home.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { MediaModule } from './media/media.module';
 import { OrdersModule } from './orders/orders.module';
+import { CouponsModule } from './coupons/coupons.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { OrdersModule } from './orders/orders.module';
     HomeModule,
     MediaModule,
     OrdersModule,
+    CouponsModule,
   ],
   controllers: [HealthController],
 })

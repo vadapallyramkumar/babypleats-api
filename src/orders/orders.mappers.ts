@@ -38,10 +38,14 @@ export function mapOrder(
     })),
     totals: {
       subtotal: order.subtotal,
+      discount: order.discount,
       shipping: order.shipping,
       total: order.total,
       currency: order.currency,
     },
+    coupon: order.couponCode
+      ? { code: order.couponCode, discount: order.discount }
+      : undefined,
     payment: {
       method: order.paymentMethod,
       status: order.paymentStatus,

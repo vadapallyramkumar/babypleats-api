@@ -10,8 +10,9 @@ import {
   Prisma,
 } from '@prisma/client';
 import type { ApiVariant } from '../common/mappers';
+import { CouponsService } from '../coupons/coupons.service';
 import { PrismaService } from '../prisma/prisma.service';
-import type { CheckoutDto, CheckoutItemDto } from './dto/checkout.dto';
+import type { CheckoutDto } from './dto/checkout.dto';
 import type { UpdateOrderDto } from './dto/update-order.dto';
 import type { VerifyPaymentDto } from './dto/verify-payment.dto';
 import {
@@ -30,6 +31,7 @@ import {
 } from './orders.mappers';
 import { RazorpayService } from './razorpay.service';
 import { computeShipping, roundMoney } from './shipping';
+import { linesSubtotal, snapshotCartItems } from './snapshot-items';
 import { applyStockDelta } from './stock';
 
 const INCLUDE_ITEMS = { items: true } as const;
@@ -43,34 +45,22 @@ const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
   cancelled: [],
 };
 
-type SnapshotLine = {
-  productId: string;
-  variantId: string;
-  productName: string;
-  sku: string | null;
-  size: string | null;
-  color: string | null;
-  qty: number;
-  unitPrice: number;
-};
-
 @Injectable()
 export class OrdersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly razorpay: RazorpayService,
+    private readonly coupons: CouponsService,
   ) {}
 
   async checkout(body: CheckoutDto) {
-    const lines = await this.snapshotItems(body.items);
-    const subtotal = roundMoney(
-      lines.reduce((sum, line) => sum + line.unitPrice * line.qty, 0),
-    );
+    const lines = await snapshotCartItems(this.prisma, body.items);
+    const subtotal = linesSubtotal(lines);
     const shipping = computeShipping(subtotal);
-    const total = roundMoney(subtotal + shipping);
     const customer = body.customer;
     const notes = body.notes?.trim() || null;
     const applyStockNow = body.paymentMethod === 'cod';
+    const couponCode = body.couponCode?.trim();
 
     const order = await this.prisma.$transaction(async (tx) => {
       await tx.$executeRawUnsafe(
@@ -80,11 +70,28 @@ export class OrdersService {
       const seq = (agg._max.seq ?? ORDER_SEQ_START - 1) + 1;
       const id = `${ORDER_ID_PREFIX}${seq}`;
 
+      let discount = 0;
+      let couponId: string | null = null;
+      let snapshotCode: string | null = null;
+      if (couponCode) {
+        const applied = await this.coupons.evaluate(
+          tx,
+          couponCode,
+          subtotal,
+          customer.phone.trim(),
+        );
+        discount = applied.discount;
+        couponId = applied.coupon.id;
+        snapshotCode = applied.coupon.code;
+      }
+
+      const total = roundMoney(subtotal - discount + shipping);
+
       if (applyStockNow) {
         await applyStockDelta(tx, lines, 'decrement');
       }
 
-      return tx.order.create({
+      const created = await tx.order.create({
         data: {
           id,
           seq,
@@ -105,8 +112,11 @@ export class OrdersService {
           paymentStatus: PaymentStatus.pending,
           subtotal,
           shipping,
+          discount,
           total,
           currency: 'INR',
+          couponId,
+          couponCode: snapshotCode,
           stockApplied: applyStockNow,
           items: {
             create: lines.map((line) => ({
@@ -123,11 +133,23 @@ export class OrdersService {
         },
         include: INCLUDE_ITEMS,
       });
+
+      if (applyStockNow && couponId) {
+        await this.coupons.recordRedemption(tx, {
+          couponId,
+          orderId: created.id,
+          phone: created.customerPhone,
+        });
+      }
+
+      return created;
     });
 
     if (body.paymentMethod === 'cod') {
       return mapOrder(order);
     }
+
+    const total = order.total;
 
     try {
       const rp = await this.razorpay.createOrder({
@@ -197,6 +219,13 @@ export class OrdersService {
     const updated = await this.prisma.$transaction(async (tx) => {
       if (!order.stockApplied) {
         await applyStockDelta(tx, order.items, 'decrement');
+      }
+      if (order.couponId) {
+        await this.coupons.recordRedemption(tx, {
+          couponId: order.couponId,
+          orderId: order.id,
+          phone: order.customerPhone,
+        });
       }
       return tx.order.update({
         where: { id: order.id },
@@ -278,6 +307,9 @@ export class OrdersService {
       if (cancelling && existing.stockApplied) {
         await applyStockDelta(tx, existing.items, 'restore');
       }
+      if (cancelling) {
+        await this.coupons.releaseRedemption(tx, existing.id);
+      }
       return tx.order.update({
         where: { id },
         data: {
@@ -305,6 +337,7 @@ export class OrdersService {
           where: revenueWhere,
           select: {
             total: true,
+            discount: true,
             paymentMethod: true,
           },
         }),
@@ -343,6 +376,9 @@ export class OrdersService {
 
     const revenue = roundMoney(
       revenueOrders.reduce((sum, row) => sum + row.total, 0),
+    );
+    const discountGiven = roundMoney(
+      revenueOrders.reduce((sum, row) => sum + row.discount, 0),
     );
     const ordersCount = revenueOrders.length;
     const averageOrderValue =
@@ -385,6 +421,7 @@ export class OrdersService {
       range,
       from: from.toISOString(),
       revenue,
+      discountGiven,
       ordersCount,
       averageOrderValue,
       toShip,
@@ -460,60 +497,6 @@ export class OrdersService {
     }
 
     return where;
-  }
-
-  private async snapshotItems(items: CheckoutItemDto[]): Promise<SnapshotLine[]> {
-    const merged = new Map<string, { productId: string; variantId: string; qty: number }>();
-    for (const item of items) {
-      const key = `${item.productId}::${item.variantId}`;
-      const current = merged.get(key);
-      if (current) {
-        current.qty += item.qty;
-      } else {
-        merged.set(key, {
-          productId: item.productId,
-          variantId: item.variantId,
-          qty: item.qty,
-        });
-      }
-    }
-
-    const productIds = [...new Set([...merged.values()].map((i) => i.productId))];
-    const products = await this.prisma.product.findMany({
-      where: { id: { in: productIds } },
-    });
-    const byId = new Map(products.map((p) => [p.id, p]));
-
-    const lines: SnapshotLine[] = [];
-    for (const item of merged.values()) {
-      const product = byId.get(item.productId);
-      if (!product || !product.isActive) {
-        throw new BadRequestException(`Product ${item.productId} is unavailable`);
-      }
-      const variants = parseVariants(product.variants);
-      const variant = variants.find((v) => v.id === item.variantId);
-      if (!variant || !variant.isActive) {
-        throw new BadRequestException(
-          `Variant ${item.variantId} is unavailable`,
-        );
-      }
-      if (variant.stock < item.qty) {
-        throw new BadRequestException(
-          `Not enough stock for ${product.name} (${variant.color} · ${variant.size})`,
-        );
-      }
-      lines.push({
-        productId: product.id,
-        variantId: variant.id,
-        productName: product.name,
-        sku: variant.sku ?? null,
-        size: variant.size ?? null,
-        color: variant.color ?? null,
-        qty: item.qty,
-        unitPrice: variant.price.selling,
-      });
-    }
-    return lines;
   }
 
   private async catalogSnapshot() {
