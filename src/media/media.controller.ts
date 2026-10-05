@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Post,
   UploadedFile,
   UseGuards,
@@ -19,6 +20,13 @@ import { ALLOWED_MEDIA_MIME_TYPES } from './media.validation';
 @Controller('media')
 export class MediaController {
   constructor(private readonly media: MediaService) {}
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async list() {
+    const data = await this.media.list();
+    return { data };
+  }
 
   @Post('upload')
   @UseGuards(JwtAuthGuard)
@@ -43,8 +51,14 @@ export class MediaController {
       },
     }),
   )
-  async upload(@UploadedFile() file: Express.Multer.File) {
-    const data = await this.media.upload(file);
+  async upload(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('alt') alt?: string,
+  ) {
+    const data = await this.media.upload(
+      file,
+      typeof alt === 'string' ? alt : '',
+    );
 
     return {
       data,
