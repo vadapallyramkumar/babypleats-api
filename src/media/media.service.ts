@@ -184,11 +184,52 @@ export class MediaService {
       publicId: result.public_id,
       resourceType: result.resource_type,
       format: result.format,
+      filename,
       width: result.width,
       height: result.height,
       bytes: result.bytes,
       duration: result.duration ?? undefined,
     };
+  }
+
+  async uploadMany(files: Express.Multer.File[], alt = '') {
+    if (!files?.length) {
+      throw new BadRequestException('At least one media file is required');
+    }
+
+    if (files.length > MEDIA_UPLOAD_MAX_FILES) {
+      throw new BadRequestException(
+        `You can upload at most ${MEDIA_UPLOAD_MAX_FILES} files at a time`,
+      );
+    }
+
+    // Ensure Cloudinary is configured before starting any uploads.
+    this.assertCloudinaryReady(true);
+
+    const uploaded: Awaited<ReturnType<MediaService['upload']>>[] = [];
+    const failed: { filename: string; message: string }[] = [];
+
+    for (const file of files) {
+      const filename = file.originalname?.trim() || 'file';
+      try {
+        uploaded.push(await this.upload(file, alt));
+      } catch (error) {
+        failed.push({
+          filename,
+          message: messageFromUploadError(error),
+        });
+      }
+    }
+
+    if (uploaded.length === 0) {
+      throw new BadRequestException(
+        failed.length === 1
+          ? failed[0].message
+          : `All uploads failed: ${failed.map((item) => `${item.filename}: ${item.message}`).join('; ')}`,
+      );
+    }
+
+    return { uploaded, failed };
   }
 
   async delete(
@@ -344,6 +385,22 @@ export class MediaService {
   }
 }
 
+function messageFromUploadError(error: unknown): string {
+  if (error instanceof BadRequestException) {
+    const response = error.getResponse();
+    if (typeof response === 'string') return response;
+    if (response && typeof response === 'object') {
+      const record = response as Record<string, unknown>;
+      if (typeof record.message === 'string') return record.message;
+      if (Array.isArray(record.message)) {
+        return record.message.map(String).join('; ');
+      }
+    }
+  }
+  if (error instanceof Error && error.message) return error.message;
+  return 'Upload failed';
+}
+
 function filenameFromPublicId(publicId: string, format?: string) {
   const tail = publicId.split('/').pop() || publicId;
   return format ? `${tail}.${format}` : tail;
@@ -392,3 +449,6 @@ function toImportRow(resource: CloudinaryResource) {
 
 /** Multer absolute ceiling (video max). Per-type limits enforced after upload. */
 export const MEDIA_UPLOAD_LIMIT_BYTES = MAX_VIDEO_BYTES;
+
+/** Max files accepted by POST /v1/media/upload-batch. */
+export const MEDIA_UPLOAD_MAX_FILES = 20;
