@@ -9,6 +9,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { MediaModule } from './media/media.module';
 import { OrdersModule } from './orders/orders.module';
 import { CouponsModule } from './coupons/coupons.module';
+import { DeliveryModule } from './delivery/delivery.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CouponsModule } from './coupons/coupons.module';
     MediaModule,
     OrdersModule,
     CouponsModule,
+    DeliveryModule,
   ],
   controllers: [HealthController],
 })

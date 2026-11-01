@@ -1,4 +1,5 @@
 import type { Order, OrderItem, OrderStatus, PaymentMethod, PaymentStatus } from '@prisma/client';
+import { DateTime } from 'luxon';
 
 export type OrderWithItems = Order & { items: OrderItem[] };
 
@@ -8,6 +9,27 @@ export type RazorpayPayload = {
   amount: number;
   currency: string;
 };
+
+function mapEstimatedDelivery(order: Order) {
+  if (
+    !order.estimatedDeliveryFrom ||
+    !order.estimatedDeliveryTo ||
+    !order.deliveryEstimateCalculatedAt
+  ) {
+    return null;
+  }
+
+  return {
+    from: DateTime.fromJSDate(order.estimatedDeliveryFrom, {
+      zone: 'utc',
+    }).toISODate()!,
+    to: DateTime.fromJSDate(order.estimatedDeliveryTo, {
+      zone: 'utc',
+    }).toISODate()!,
+    region: order.deliveryRegionName ?? undefined,
+    calculatedAt: order.deliveryEstimateCalculatedAt.toISOString(),
+  };
+}
 
 export function mapOrder(
   order: OrderWithItems,
@@ -52,6 +74,7 @@ export function mapOrder(
       razorpayOrderId: order.razorpayOrderId ?? undefined,
       razorpayPaymentId: order.razorpayPaymentId ?? undefined,
     },
+    estimatedDelivery: mapEstimatedDelivery(order),
     notes: order.notes ?? undefined,
     createdAt: order.createdAt.toISOString(),
     updatedAt: order.updatedAt.toISOString(),

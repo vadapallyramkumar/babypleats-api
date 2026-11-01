@@ -11,6 +11,7 @@ import {
 } from '@prisma/client';
 import type { ApiVariant } from '../common/mappers';
 import { CouponsService } from '../coupons/coupons.service';
+import { DeliveryService } from '../delivery/delivery.service';
 import { PrismaService } from '../prisma/prisma.service';
 import type { CheckoutDto } from './dto/checkout.dto';
 import type { UpdateOrderDto } from './dto/update-order.dto';
@@ -51,6 +52,7 @@ export class OrdersService {
     private readonly prisma: PrismaService,
     private readonly razorpay: RazorpayService,
     private readonly coupons: CouponsService,
+    private readonly delivery: DeliveryService,
   ) {}
 
   async checkout(body: CheckoutDto) {
@@ -61,6 +63,10 @@ export class OrdersService {
     const notes = body.notes?.trim() || null;
     const applyStockNow = body.paymentMethod === 'cod';
     const couponCode = body.couponCode?.trim();
+    // Always recalculate on the server; ignore any client-supplied dates.
+    const deliveryEstimate = await this.delivery.snapshotForCheckout(
+      customer.pincode,
+    );
 
     const order = await this.prisma.$transaction(async (tx) => {
       await tx.$executeRawUnsafe(
@@ -118,6 +124,11 @@ export class OrdersService {
           couponId,
           couponCode: snapshotCode,
           stockApplied: applyStockNow,
+          estimatedDeliveryFrom: deliveryEstimate.estimatedDeliveryFrom,
+          estimatedDeliveryTo: deliveryEstimate.estimatedDeliveryTo,
+          deliveryRegionName: deliveryEstimate.deliveryRegionName,
+          deliveryEstimateCalculatedAt:
+            deliveryEstimate.deliveryEstimateCalculatedAt,
           items: {
             create: lines.map((line) => ({
               productId: line.productId,
