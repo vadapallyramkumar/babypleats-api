@@ -14,7 +14,23 @@ async function bootstrap() {
     .filter(Boolean);
 
   app.enableCors({
-    origin: origins,
+    origin: (origin, callback) => {
+      // Non-browser clients (curl, server-to-server) send no Origin.
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+      if (origins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+      // Vite may bind 5173/5174/5175/... when ports are busy.
+      if (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(null, false);
+    },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
