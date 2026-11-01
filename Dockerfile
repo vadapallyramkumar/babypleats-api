@@ -1,11 +1,15 @@
 FROM node:22-alpine AS deps
 WORKDIR /app
+# Keep install in non-production mode so Nest/TS build tooling is available.
+ENV NODE_ENV=development
 RUN apk add --no-cache libc6-compat openssl
 COPY package.json package-lock.json ./
-RUN npm ci --no-audit --no-fund
+# ignore-scripts: Prisma engines are generated explicitly in the build stage.
+RUN npm ci --no-audit --no-fund --ignore-scripts
 
 FROM node:22-alpine AS build
 WORKDIR /app
+ENV NODE_ENV=development
 RUN apk add --no-cache libc6-compat openssl
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
