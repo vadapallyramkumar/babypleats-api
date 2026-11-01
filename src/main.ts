@@ -4,38 +4,31 @@ import { ValidationPipe, RequestMethod } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ApiExceptionFilter } from './common/api-exception.filter';
+import { isOriginAllowed, parseCorsOrigins } from './common/cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const origins = (process.env.CORS_ORIGIN ?? 'http://localhost:3000')
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
+  // CORS_ORIGIN: comma-separated allowlist (e.g. production + temporary Render URLs).
+  const allowedOrigins = parseCorsOrigins(process.env.CORS_ORIGIN);
 
   app.enableCors({
     origin: (
       origin: string | undefined,
       callback: (err: Error | null, allow?: boolean) => void,
     ) => {
-      // Non-browser clients (curl, server-to-server) send no Origin.
-      if (!origin) {
-        callback(null, true);
-        return;
-      }
-      if (origins.includes(origin)) {
-        callback(null, true);
-        return;
-      }
-      // Vite may bind 5173/5174/5175/... when ports are busy.
-      if (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
+      if (isOriginAllowed(origin, allowedOrigins)) {
+        // Reflect the request Origin (never '*') when allowed.
         callback(null, true);
         return;
       }
       callback(null, false);
     },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin'],
+    // Auth is Bearer JWT via Authorization; cookies are not used for auth.
+    // Keep credentials off so we never pair credentials with a wildcard origin.
+    credentials: false,
   });
 
   app.setGlobalPrefix('v1', {
