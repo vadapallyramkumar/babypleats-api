@@ -14,7 +14,10 @@ async function bootstrap() {
     .filter(Boolean);
 
   app.enableCors({
-    origin: (origin, callback) => {
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
       // Non-browser clients (curl, server-to-server) send no Origin.
       if (!origin) {
         callback(null, true);
