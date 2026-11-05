@@ -92,7 +92,7 @@ export class MediaService {
   private mediaFolder() {
     return (
       this.config.get<string>('CLOUDINARY_FOLDER')?.trim() ||
-      'babypleates/products'
+      'babypleats'
     );
   }
 
