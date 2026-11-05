@@ -113,7 +113,7 @@ docker compose up --build
 
 1. PostgreSQL + `DATABASE_URL`
 2. `PORT`, `CORS_ORIGIN`, `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` (optional `ADMIN_NAME`, `JWT_EXPIRES_IN`, `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE`)
-3. Cloudinary: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `CLOUDINARY_UPLOAD_PRESET` (optional `CLOUDINARY_FOLDER`)
+3. Cloudinary: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` (optional `CLOUDINARY_UPLOAD_PRESET` for signed server uploads; optional `CLOUDINARY_FOLDER`, default `babypleats`)
 4. Razorpay (Pay online): `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET` (optional `FREE_SHIPPING_THRESHOLD`, `SHIPPING_FEE`)
 5. Health check: `/health`
 6. Deploy; image runs `prisma migrate deploy` then `node dist/main.js` (does **not** seed catalog; admin owner is created on first boot from env if missing)

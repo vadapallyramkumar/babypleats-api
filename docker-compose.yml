@@ -30,7 +30,7 @@ services:
       CLOUDINARY_API_KEY: "${CLOUDINARY_API_KEY}"
       CLOUDINARY_API_SECRET: "${CLOUDINARY_API_SECRET}"
       CLOUDINARY_UPLOAD_PRESET: "${CLOUDINARY_UPLOAD_PRESET}"
-      CLOUDINARY_FOLDER: "${CLOUDINARY_FOLDER:-babypleates/products}"
+      CLOUDINARY_FOLDER: "${CLOUDINARY_FOLDER:-babypleats}"
     depends_on:
       postgres:
         condition: service_healthy

@@ -71,22 +71,17 @@ export class MediaService {
     });
   }
 
-  private assertCloudinaryReady(requireUploadPreset = false) {
+  private assertCloudinaryReady() {
     const { cloudName, apiKey, apiSecret, uploadPreset } =
       this.getCloudinaryCredentials();
 
-    if (
-      !cloudName ||
-      !apiKey ||
-      !apiSecret ||
-      (requireUploadPreset && !uploadPreset)
-    ) {
+    if (!cloudName || !apiKey || !apiSecret) {
       throw new ServiceUnavailableException('Cloudinary is not configured');
     }
 
     this.configureCloudinary();
 
-    return { uploadPreset: uploadPreset! };
+    return { uploadPreset: uploadPreset || undefined };
   }
 
   private mediaFolder() {
@@ -94,6 +89,23 @@ export class MediaService {
       this.config.get<string>('CLOUDINARY_FOLDER')?.trim() ||
       'babypleats'
     );
+  }
+
+  /**
+   * Log Cloudinary failure details for ops; never include credentials/secrets.
+   * Returns a safe, actionable message suitable for API clients.
+   */
+  private reportCloudinaryFailure(
+    error: unknown,
+    operation: 'upload' | 'delete',
+    label?: string,
+  ) {
+    const details = extractCloudinaryErrorDetails(error);
+    const target = label?.trim() || operation;
+    this.logger.error(
+      `Cloudinary ${operation} failed for ${target}: name=${details.name ?? 'n/a'} http_code=${details.httpCode ?? 'n/a'} error_code=${details.errorCode ?? 'n/a'} message=${details.message}`,
+    );
+    return toSafeCloudinaryClientMessage(details, operation);
   }
 
   async list() {
@@ -114,17 +126,29 @@ export class MediaService {
 
   async upload(file: Express.Multer.File, alt = '') {
     const { file: validated, resourceType } = await validateUploadedMedia(file);
-    const { uploadPreset } = this.assertCloudinaryReady(true);
+    // Signed server-side upload_stream authenticates with API key/secret.
+    // upload_preset is optional here (required only for unsigned client uploads).
+    const { uploadPreset } = this.assertCloudinaryReady();
 
     const folder = this.mediaFolder();
+    const filename =
+      validated.originalname?.trim() || 'file';
+
+    const uploadOptions: {
+      resource_type: 'image' | 'video';
+      folder: string;
+      upload_preset?: string;
+    } = {
+      resource_type: resourceType,
+      folder,
+    };
+    if (uploadPreset) {
+      uploadOptions.upload_preset = uploadPreset;
+    }
 
     const result = await new Promise<UploadApiResponse>((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
-        {
-          resource_type: resourceType,
-          upload_preset: uploadPreset,
-          folder,
-        },
+        uploadOptions,
         (error, uploaded) => {
           if (error) {
             reject(error);
@@ -142,24 +166,23 @@ export class MediaService {
 
       stream.end(validated.buffer);
     }).catch((error) => {
-      const message =
-        error instanceof Error ? error.message : 'Cloudinary upload failed';
-
-      throw new BadRequestException(message);
+      throw new BadRequestException(
+        this.reportCloudinaryFailure(error, 'upload', filename),
+      );
     });
 
-    const filename =
+    const storedFilename =
       validated.originalname?.trim() ||
       filenameFromPublicId(result.public_id, result.format);
     const altText =
-      alt.trim().slice(0, 500) || filename.replace(/\.[^.]+$/, '');
+      alt.trim().slice(0, 500) || storedFilename.replace(/\.[^.]+$/, '');
 
     await this.prisma.mediaAsset.upsert({
       where: { publicId: result.public_id },
       create: {
         publicId: result.public_id,
         url: result.secure_url,
-        filename,
+        filename: storedFilename,
         alt: altText,
         mimeType:
           validated.mimetype ||
@@ -169,7 +192,7 @@ export class MediaService {
       },
       update: {
         url: result.secure_url,
-        filename,
+        filename: storedFilename,
         alt: altText,
         mimeType:
           validated.mimetype ||
@@ -184,7 +207,7 @@ export class MediaService {
       publicId: result.public_id,
       resourceType: result.resource_type,
       format: result.format,
-      filename,
+      filename: storedFilename,
       width: result.width,
       height: result.height,
       bytes: result.bytes,
@@ -204,7 +227,7 @@ export class MediaService {
     }
 
     // Ensure Cloudinary is configured before starting any uploads.
-    this.assertCloudinaryReady(true);
+    this.assertCloudinaryReady();
 
     const uploaded: Awaited<ReturnType<MediaService['upload']>>[] = [];
     const failed: { filename: string; message: string }[] = [];
@@ -245,25 +268,23 @@ export class MediaService {
     const type: MediaResourceType =
       resourceType === 'video' ? 'video' : 'image';
 
-    this.assertCloudinaryReady(false);
+    this.assertCloudinaryReady();
 
     const result = await cloudinary.uploader
       .destroy(id, { resource_type: type })
       .catch((error: unknown) => {
-        const message =
-          error instanceof Error ? error.message : 'Cloudinary delete failed';
-
-        throw new BadRequestException(message);
+        throw new BadRequestException(
+          this.reportCloudinaryFailure(error, 'delete', id),
+        );
       });
 
     if (result.result === 'not found' && type === 'image') {
       const videoResult = await cloudinary.uploader
         .destroy(id, { resource_type: 'video' })
         .catch((error: unknown) => {
-          const message =
-            error instanceof Error ? error.message : 'Cloudinary delete failed';
-
-          throw new BadRequestException(message);
+          throw new BadRequestException(
+            this.reportCloudinaryFailure(error, 'delete', id),
+          );
         });
 
       if (videoResult.result === 'ok') {
@@ -342,7 +363,7 @@ export class MediaService {
   }
 
   private async importMissingCloudinaryAssets() {
-    this.assertCloudinaryReady(false);
+    this.assertCloudinaryReady();
     const prefix = this.mediaFolder();
     const resources = [
       ...(await this.listCloudinaryResources('image', prefix)),
@@ -399,6 +420,131 @@ function messageFromUploadError(error: unknown): string {
   }
   if (error instanceof Error && error.message) return error.message;
   return 'Upload failed';
+}
+
+export type CloudinaryErrorDetails = {
+  message: string;
+  name?: string;
+  httpCode?: number;
+  errorCode?: string;
+};
+
+/** Extract Cloudinary SDK / API error fields without logging secrets. */
+export function extractCloudinaryErrorDetails(
+  error: unknown,
+): CloudinaryErrorDetails {
+  if (error == null) {
+    return { message: 'Unknown Cloudinary error' };
+  }
+
+  if (typeof error === 'string') {
+    return { message: sanitizeCloudinaryMessage(error) };
+  }
+
+  if (typeof error !== 'object') {
+    return { message: 'Unknown Cloudinary error' };
+  }
+
+  const record = error as Record<string, unknown>;
+  const nested =
+    record.error && typeof record.error === 'object'
+      ? (record.error as Record<string, unknown>)
+      : undefined;
+
+  const rawMessage =
+    firstString(record.message) ||
+    firstString(nested?.message) ||
+    (error instanceof Error ? error.message : '') ||
+    'Cloudinary request failed';
+
+  const name = firstString(record.name) || firstString(nested?.name);
+  const httpCode = firstNumber(record.http_code) ?? firstNumber(nested?.http_code);
+  const errorCode = firstStringOrNumber(
+    record.error_code ??
+      record.code ??
+      nested?.error_code ??
+      nested?.code,
+  );
+
+  return {
+    message: sanitizeCloudinaryMessage(rawMessage),
+    name: name ? sanitizeCloudinaryMessage(name) : undefined,
+    httpCode,
+    errorCode: errorCode
+      ? sanitizeCloudinaryMessage(String(errorCode))
+      : undefined,
+  };
+}
+
+/**
+ * Map Cloudinary failures to actionable client copy.
+ * Preserves useful Cloudinary messages; never returns credentials/signatures.
+ */
+export function toSafeCloudinaryClientMessage(
+  details: CloudinaryErrorDetails,
+  operation: 'upload' | 'delete' = 'upload',
+): string {
+  const message = details.message;
+  const lower = message.toLowerCase();
+  const verb = operation === 'delete' ? 'delete' : 'upload';
+
+  if (
+    details.httpCode === 401 ||
+    details.httpCode === 403 ||
+    /invalid (api[_ ]?key|signature|credentials)|unauthorized|not allowed|forbidden/i.test(
+      message,
+    )
+  ) {
+    return `Cloudinary ${verb} failed: invalid credentials. Check CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET for this cloud.`;
+  }
+
+  if (
+    /upload[_\s-]?preset|unknown preset|preset must be|must supply upload preset/i.test(
+      message,
+    )
+  ) {
+    return `Cloudinary ${verb} failed: invalid or incompatible upload preset. Use a signed preset that exists on this cloud, or leave CLOUDINARY_UPLOAD_PRESET empty for server-side signed uploads.`;
+  }
+
+  if (/folder|asset_folder|invalid path/i.test(lower)) {
+    return `Cloudinary ${verb} failed: folder configuration rejected (${message}). Check CLOUDINARY_FOLDER for this cloud.`;
+  }
+
+  if (details.httpCode === 404 || /cloud[_ ]?name/i.test(message)) {
+    return `Cloudinary ${verb} failed: cloud or resource not found. Verify CLOUDINARY_CLOUD_NAME.`;
+  }
+
+  if (message && message !== 'Cloudinary request failed') {
+    return `Cloudinary ${verb} failed: ${message}`;
+  }
+
+  return `Cloudinary ${verb} failed`;
+}
+
+function firstString(value: unknown): string | undefined {
+  return typeof value === 'string' && value.trim() ? value.trim() : undefined;
+}
+
+function firstNumber(value: unknown): number | undefined {
+  return typeof value === 'number' && Number.isFinite(value)
+    ? value
+    : undefined;
+}
+
+function firstStringOrNumber(value: unknown): string | undefined {
+  if (typeof value === 'string' && value.trim()) return value.trim();
+  if (typeof value === 'number' && Number.isFinite(value)) return String(value);
+  return undefined;
+}
+
+/** Strip credential-like tokens from messages before logging or client return. */
+function sanitizeCloudinaryMessage(message: string): string {
+  return message
+    .replace(
+      /(api[_-]?secret|api[_-]?key|signature|token|authorization|password)\s*[:=]\s*['"]?[^'",\s]+/gi,
+      '$1=[redacted]',
+    )
+    .slice(0, 500);
 }
 
 function filenameFromPublicId(publicId: string, format?: string) {
